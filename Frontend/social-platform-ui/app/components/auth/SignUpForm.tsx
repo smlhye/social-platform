@@ -3,18 +3,33 @@
 import { useI18n } from "@/app/lib/i18nContext";
 import { TextInput } from "../common/Input";
 import { ButtonSubmit } from "../common/Button";
-import { FaEye, FaLock, FaUser } from "react-icons/fa";
+import { FaEye, FaEyeSlash, FaLock, FaUser } from "react-icons/fa";
+import { useState } from "react";
 
 export default function SignUpForm() {
     const { t } = useI18n();
+    const [showPassword, setShowPassword] = useState<boolean>(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
     return (
         <>
             <h1 className="text-2xl font-bold text-secondary-foreground">{t('auth.signupTitle')}</h1>
 
             <form className="flex flex-col gap-4">
                 <TextInput type="text" placeholder={t('auth.username')} iconLeft={<FaUser />} />
-                <TextInput placeholder={t('auth.password')} iconLeft={<FaLock />} iconRight={<FaEye />} />
-                <TextInput placeholder={t('auth.confirmPassword')} iconLeft={<FaLock />} iconRight={<FaEye />} />
+                <TextInput type={showPassword ? "text" : "password"} placeholder={t('auth.password')} iconLeft={<FaLock />} iconRight={
+                    showPassword ? (
+                        <FaEyeSlash onClick={() => setShowPassword(false)} />
+                    ) : (
+                        <FaEye onClick={() => setShowPassword(true)} />
+                    )
+                } />
+                <TextInput type={showConfirmPassword ? "text" : "password"} placeholder={t('auth.confirmPassword')} iconLeft={<FaLock />} iconRight={
+                    showConfirmPassword ? (
+                        <FaEyeSlash onClick={() => setShowConfirmPassword(false)} />
+                    ) : (
+                        <FaEye onClick={() => setShowConfirmPassword(true)} />
+                    )
+                } />
                 <ButtonSubmit value={t('auth.signupSubmit')} />
             </form>
 
