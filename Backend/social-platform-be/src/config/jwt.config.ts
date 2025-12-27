@@ -1,0 +1,8 @@
+import { registerAs } from "@nestjs/config";
+
+export default registerAs('jwt', () => ({
+    secret: process.env.JWT_SECRET,
+    expiresIn: process.env.JWT_EXPIRES_IN,
+    rememberExpiresIn: process.env.JWT_REMEMBER_EXPIRES_IN,
+    cookieDomain: process.env.COOKIE_DOMAIN,
+}));

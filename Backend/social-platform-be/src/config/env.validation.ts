@@ -1,30 +1,18 @@
-import { IsString, IsNumber } from 'class-validator';
+import * as Joi from 'joi';
 
-export class EnvValidationSchema {
-    @IsNumber()
-    PORT: number;
+export const envValidationSchema = Joi.object({
+    PORT: Joi.number().required(),
+    NODE_ENV: Joi.string().valid('development', 'production', 'test').required(),
 
-    @IsString()
-    NODE_ENV: string;
+    DB_HOST: Joi.string().required(),
+    DB_PORT: Joi.number().required(),
+    DB_USERNAME: Joi.string().required(),
+    DB_PASSWORD: Joi.string().required(),
+    DB_DATABASE: Joi.string().required(),
 
-    @IsString()
-    DB_HOST: string;
+    JWT_SECRET: Joi.string().required(),
+    JWT_EXPIRES_IN: Joi.string().required(),
+    JWT_REMEMBER_EXPIRES_IN: Joi.string().required(),
 
-    @IsNumber()
-    DB_PORT: number;
-
-    @IsString()
-    DB_USERNAME: string;
-
-    @IsString()
-    DB_PASSWORD: string;
-
-    @IsString()
-    DB_DATABASE: string;
-
-    @IsString()
-    JWT_SECRET: string;
-
-    @IsString()
-    JWT_EXPIRES_IN: string;
-}
+    COOKIE_DOMAIN: Joi.string().required(),
+});

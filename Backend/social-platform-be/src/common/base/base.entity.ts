@@ -5,7 +5,7 @@ export abstract class BaseEntity {
     id: string;
 
     @CreateDateColumn({ name: 'created_at' })
-    createAt: Date;
+    createdAt: Date;
 
     @UpdateDateColumn({ name: 'updated_at' })
     updateAt: Date;
