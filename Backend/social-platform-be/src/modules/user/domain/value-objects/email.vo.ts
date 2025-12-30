@@ -1,4 +1,4 @@
-import { ValueObject } from "src/common/base/base.value-object";
+import { ValueObject } from "src/common/base/value-object.base";
 
 interface EmailProps {
     value: string;
@@ -9,15 +9,14 @@ export class Email extends ValueObject<EmailProps> {
         super(props);
     }
 
-    get value(): string {
-        return this.props.value;
-    }
-
-    static create(value: string): Email {
-        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!regex.test(value)) {
+    static create(email: string): Email {
+        if (!/^\S+@\S+\.\S+$/.test(email)) {
             throw new Error('Invalid email');
         }
-        return new Email({ value })
+        return new Email({ value: email.toLowerCase() });
+    }
+
+    get value(): string {
+        return this.props.value;
     }
 }

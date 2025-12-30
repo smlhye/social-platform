@@ -1,0 +1,1 @@
+CREATE TABLE social_platform;
