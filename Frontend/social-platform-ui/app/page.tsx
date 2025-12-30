@@ -1,16 +1,61 @@
+import { Sidebar } from "../app/components/layout/Sidebar";
 import { FriendLabel } from "../app/components/chat/FriendLabel";
+import { MessageBubble } from "../app/components/chat/MessageBubble";
+
+export type MessagePosition = "single" | "first" | "middle" | "last"
+
+export interface Message {
+  id: string
+  content: string
+  senderId: string
+}
+
+export function getMessagePosition(
+  messages: Message[],
+  index: number
+): MessagePosition {
+  const current = messages[index]
+  const prev = messages[index - 1]
+  const next = messages[index + 1]
+
+  const samePrev = prev && prev.senderId === current.senderId
+  const sameNext = next && next.senderId === current.senderId
+
+  if (!samePrev && !sameNext) return "single"
+  if (!samePrev && sameNext) return "first"
+  if (samePrev && sameNext) return "middle"
+  return "last"
+}
 
 export default function Home() {
   const users = [
     { name: "Hồ Đông Huy", lastMes: "Ok không có gì nha bạn", time: "1 phút", read: false },
     { name: "Nguyễn Văn An", lastMes: "Ê mà cái bài tập hôm quá nó khó vãi luôn á bạn làm được không", time: "10 phút", read: false },
-    { avatar: "/otisadminbg.jpeg", name: "Lê Văn An", lastMes: "Hihi", time: "1 giờ", read: true }
+    { avatar: "/otisadminbg.jpeg", name: "Lê Văn An", lastMes: "Hihi", time: "1 giờ", read: true, active: true }
   ]
+
+  const myId = "me"
+
+  const messages: Message[] = [
+    { id: "1", content: "Ê mày", senderId: "me" },
+    { id: "2", content: "Gì vậy", senderId: "me" },
+    { id: "3", content: "Tối nay rảnh không", senderId: "me" },
+
+    { id: "4", content: "Rảnh", senderId: "u1" },
+    { id: "5", content: "Có gì không", senderId: "u1" },
+
+    { id: "6", content: "Đi cà phê", senderId: "me" },
+    { id: "7", content: "Tối nay ra đánh game, chơi lên chiến thần 100 sao luôn quá đã hahaha", senderId: "me" }
+  ]
+
 
   return (
     <div className="flex flex-1 min-h-[calc(100vh-64px)]">
+
       {/* Sidebar */}
-      <aside className="hidden sm:flex flex-col w-85 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 p-4">
+      <Sidebar />
+
+      <aside className="hidden sm:flex flex-col w-85 bg-background border-r border-gray-200 dark:border-gray-700 p-4">
         <h2 className="text-xl font-semibold mb-2">Chats</h2>
         <ul className="flex flex-col gap-2 overflow-y-auto">
           {
@@ -22,6 +67,7 @@ export default function Home() {
                 lastMes={user.lastMes}
                 time={user.time}
                 read={user.read}
+                active={user.active}
               />
             ))
           }
@@ -40,13 +86,15 @@ export default function Home() {
       <main className="flex-1 flex flex-col justify-between">
         {/* Messages */}
         <div className="flex-1 p-6 overflow-y-auto">
-          <div className="flex flex-col gap-4 max-w-xl mx-auto">
-            <div className="self-start bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-lg p-3 shadow-sm">
-              Hello! Welcome to your chat app.
-            </div>
-            <div className="self-end bg-gray-200 dark:bg-blue-500 text-gray-900 dark:text-white rounded-lg p-3 shadow-sm">
-              Hi there! Let's build something cool.
-            </div>
+          <div className="flex flex-col max-w-4xl mx-auto">
+            {messages.map((msg, index) => (
+              <MessageBubble
+                key={msg.id}
+                content={msg.content}
+                isMe={msg.senderId === myId}
+                position={getMessagePosition(messages, index)}
+              />
+            ))}
           </div>
         </div>
 
