@@ -1,31 +1,19 @@
-import { BaseEntity } from "src/common/base/base.entity";
-import { Column, Entity, Index } from "typeorm";
+import { UserId } from '../value-objects/user-id.vo';
+import { Email } from '../value-objects/email.vo';
+import { AuditableEntity } from 'src/common/base/auditable-entity.base';
 
-@Entity("users")
-export class User extends BaseEntity {
-    @Index({ unique: true })
-    @Column({ unique: true, length: 50 })
-    username: string;
+export class User extends AuditableEntity<UserId> {
+    private name: string;
+    private email: Email;
 
-    @Column({ name: "hashed_password" })
-    private hashedPassword: string;
+    constructor(id: UserId, name: string, email: Email) {
+        super(id);
+        this.name = name;
+        this.email = email;
+    }
 
-    @Column({ name: "first_name", length: 50 })
-    firstName: string;
-
-    @Column({ name: "last_name", length: 100 })
-    lastName: string;
-
-    @Index({ unique: true })
-    @Column({ unique: true })
-    email: string;
-
-    @Column({ name: 'phone_number', length: 20, nullable: true })
-    phoneNumber: string;
-
-    @Column({ name: 'verify_email', default: false })
-    verifyEmail: boolean;
-
-    @Column({ name: "is_deleted", default: false })
-    isDeleted: boolean;
+    updateProfile(name: string, email: Email) {
+        this.name = name;
+        this.email = email;
+    }
 }
