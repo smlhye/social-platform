@@ -1,20 +1,38 @@
+import { FriendLabel } from "../app/components/chat/FriendLabel";
+
 export default function Home() {
-  const users = ["Alice", "Bob", "Charlie"];
+  const users = [
+    { name: "Hồ Đông Huy", lastMes: "Ok không có gì nha bạn", time: "1 phút", read: false },
+    { name: "Nguyễn Văn An", lastMes: "Ê mà cái bài tập hôm quá nó khó vãi luôn á bạn làm được không", time: "10 phút", read: false },
+    { avatar: "/otisadminbg.jpeg", name: "Lê Văn An", lastMes: "Hihi", time: "1 giờ", read: true }
+  ]
 
   return (
     <div className="flex flex-1 min-h-[calc(100vh-64px)]">
       {/* Sidebar */}
-      <aside className="hidden sm:flex flex-col w-72 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 p-4">
-        <h2 className="text-xl font-semibold mb-6">Chats</h2>
+      <aside className="hidden sm:flex flex-col w-85 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 p-4">
+        <h2 className="text-xl font-semibold mb-2">Chats</h2>
         <ul className="flex flex-col gap-2 overflow-y-auto">
-          {users.map((user) => (
+          {
+            users.map((user, index) => (
+              <FriendLabel
+                key={index}
+                avatar={user.avatar}
+                name={user.name}
+                lastMes={user.lastMes}
+                time={user.time}
+                read={user.read}
+              />
+            ))
+          }
+          {/* {users.map((user) => (
             <li
               key={user}
               className="p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
             >
               {user}
             </li>
-          ))}
+          ))} */}
         </ul>
       </aside>
 
