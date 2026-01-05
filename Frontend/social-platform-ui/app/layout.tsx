@@ -28,11 +28,15 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100`}
+        className={`${geistSans.variable} ${geistMono.variable} 
+        antialiased 
+        h-screen overflow-hidden
+        bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100
+        flex flex-col`}
       >
         <I18nProvider>
           <Header isSignedIn={isSignedIn} />
-          <main className="flex-1">{children}</main>
+          <main className="flex-1 overflow-hidden min-h-0">{children}</main>
         </I18nProvider> 
       </body>
     </html>

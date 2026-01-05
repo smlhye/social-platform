@@ -1,11 +1,16 @@
-import HomeFilledIcon from '@mui/icons-material/HomeFilled';
-import ChatIcon from '@mui/icons-material/Chat';
-import ContactsIcon from '@mui/icons-material/Contacts';
-import SettingsIcon from '@mui/icons-material/Settings';
+import { GoHome } from "react-icons/go";
+import { GoHomeFill } from "react-icons/go";
+import { AiOutlineMessage } from "react-icons/ai";
+import { AiFillMessage } from "react-icons/ai";
+import { RiContactsBook3Line } from "react-icons/ri";
+import { RiContactsBook3Fill } from "react-icons/ri";
+import { IoSettingsOutline } from "react-icons/io5";
+import { IoSettingsSharp } from "react-icons/io5";
 
-interface SidebarItemType {
+export interface SidebarItemType {
     id: string,
     icon: React.ReactNode,
+    iconActive: React.ReactNode,
     type: "nav" | "action",
     href?: string,
     onClick?: () => void,
@@ -15,28 +20,32 @@ interface SidebarItemType {
 export const sidebarItems: SidebarItemType[] = [
     {
         id: "home",
-        icon: <HomeFilledIcon />,
+        icon: <GoHome />,
+        iconActive: <GoHomeFill />,
         type: "nav",
-        href: "",
+        href: "/",
         label: "Home"
     },
     {
         id: "mes",
-        icon: <ChatIcon />,
+        icon: <AiOutlineMessage />,
+        iconActive: <AiFillMessage />,
         type: "nav",
         href: "/mes",
         label: "Message"
     },
     {
         id: "contact",
-        icon: <ContactsIcon />,
+        icon: <RiContactsBook3Line />,
+        iconActive: <RiContactsBook3Fill />,
         type: "nav",
         href: "/contact",
         label: "Contacts"
     },
     {
         id: "setting",
-        icon: <SettingsIcon />,
+        icon: <IoSettingsOutline />,
+        iconActive: <IoSettingsSharp />,
         type: "action",
         onClick: () => alert("Xin chào"),
         label: "Settings"

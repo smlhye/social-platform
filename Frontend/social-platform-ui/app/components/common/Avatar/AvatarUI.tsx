@@ -31,10 +31,11 @@ function stringAvatar(name: string) {
 
 interface AvatarUIProps {
     avatar?: string,
-    name: string
+    name: string,
+    size?: number
 }
 
-export default function AvatarUI({ avatar, name }: AvatarUIProps) {
+export default function AvatarUI({ avatar, name, size = 40 }: AvatarUIProps) {
 
     const avatarData = !avatar ? stringAvatar(name) : null
 
@@ -43,6 +44,9 @@ export default function AvatarUI({ avatar, name }: AvatarUIProps) {
             src={avatar ?? undefined}
             sx={{
                 background: avatarData?.gradient,
+                width: size,
+                height: size,
+                fontSize: size * 0.45,
             }}
         >
             {!avatar && avatarData?.children}
