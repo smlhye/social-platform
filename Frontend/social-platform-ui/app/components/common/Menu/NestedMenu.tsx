@@ -69,12 +69,12 @@ export default function NestedMenu({
                             onClick={() => {
                                 if (!item.children) {
                                     onItemClick(item);
-                                    onClose();
+                                    // onClose();
                                 }
                             }}
                         >
                             <Stack direction="row" gap={1} alignItems="center">
-                                {item.icon}
+                                <Box width={20} className="flex items-center">{item.icon}</Box>
                                 <span>{label}</span>
                             </Stack>
                             {item.children && <KeyboardArrowRightIcon />}

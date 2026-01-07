@@ -8,6 +8,7 @@ import { Box, CircularProgress } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useI18n } from "./lib/i18nContext";
 import Chat, { testMessages } from "./components/chat/Chat/Chat";
+import "flag-icons/css/flag-icons.min.css";
 
 export type MessagePosition = "single" | "first" | "middle" | "last"
 

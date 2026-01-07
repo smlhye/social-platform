@@ -1,4 +1,5 @@
 import { Box } from "@mui/material"
+import { AvatarUI } from "../../common/Avatar"
 
 export type MessagePosition = "single" | "first" | "middle" | "last"
 
@@ -6,14 +7,16 @@ interface MessageBubbleProps {
     content: string,
     isMe: boolean,
     position?: MessagePosition,
-    time: string
+    time: string,
+    user: string,
 }
 
 export default function MessageBubble({
     content,
     isMe,
     position = "single",
-    time
+    time,
+    user
 }: MessageBubbleProps) {
 
     const radiusMap: Record<MessagePosition, string> = {
@@ -24,22 +27,38 @@ export default function MessageBubble({
     }
 
     return (
-        <Box className={`flex flex-col items-${isMe ? "end" : "start"} mb-1`}>
-            {/* Bubble */}
-            <Box className={`max-w-[60%] px-3 py-2 rounded-mes
-                ${isMe ? "self-end bg-primary text-primary-foreground"
-                    : "self-start bg-secondary text-secondary-foreground"}
-                ${radiusMap[position]}
-            `}>
-                {content}
+        <Box className={`${position === "middle" ? "mb-0" : "mb-1"} flex flex-col`}>
+            <Box className={`flex items-end gap-2 ${isMe ? "justify-end" : "justify-start"}`}>
+                {/* Avatar hoặc khoảng trống */}
+                {!isMe ? (
+                    (position === "single" || position === "first") ? (
+                        <AvatarUI name="Hồ Đông Huy" size={40} />
+                    ) : (
+                        <Box style={{ width: 40 }} />
+                    )
+                ) : (
+                    <Box style={{ width: 40 }} /> // giữ khoảng cho căn phải
+                )}
+
+                {/* Bubble */}
+                <Box className={`max-w-[60%] px-3 py-2 rounded-mes
+                    ${isMe ? "bg-primary text-primary-foreground"
+                        : "bg-secondary text-secondary-foreground"}
+                    ${radiusMap[position]}
+                `}>
+                    {content}
+                </Box>
             </Box>
 
-            {/* Timestamp chỉ hiển thị với single hoặc last */}
+            {/* Timestamp */}
             {(position === "single" || position === "last") && (
-                <span className={`mt-1 text-xs ${isMe ? "pr-1 self-end text-primary-foreground/70"
-                    : "pl-1 self-start text-secondary-foreground/70"}`}>
-                    {time}
-                </span>
+                <Box
+                    className={`flex ${isMe ? "justify-end" : "justify-start"} mt-1`}
+                    style={{  }} // trùng max-width của bubble
+                >
+                    {!isMe ? (<Box style={{ width: 40 }} />): ""}
+                    <span className="ml-3 text-xs text-secondary-foreground">{time}</span>
+                </Box>
             )}
         </Box>
     )

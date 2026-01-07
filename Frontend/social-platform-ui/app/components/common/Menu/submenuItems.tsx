@@ -3,6 +3,8 @@ import { IoSettingsOutline } from "react-icons/io5";
 import { MdOutlineLanguage } from "react-icons/md";
 import { MENU_ACTIONS } from "./menuAction";
 
+
+
 export interface NestedMenuItem {
     id: string,
     labelKey: string,
@@ -33,24 +35,28 @@ export const subMenuItems: NestedMenuItem[] = [
             {
                 id: "vnlang",
                 labelKey: "vietnamese",
+                icon: <span className="fi fi-vn" />,
                 action: MENU_ACTIONS.CHANGE_LANG,
                 payload: "vi"
             },
             {
                 id: "enlang",
                 labelKey: "english",
+                icon: <span className="fi fi-us" />,
                 action: MENU_ACTIONS.CHANGE_LANG,
                 payload: "en"
             },
             {
                 id: "jalang",
                 labelKey: "japanese",
+                icon: <span className="fi fi-jp" />,
                 action: MENU_ACTIONS.CHANGE_LANG,
                 payload: "ja"
             },
             {
                 id: "cnlang",
                 labelKey: "chinese",
+                icon: <span className="fi fi-cn" />,
                 action: MENU_ACTIONS.CHANGE_LANG,
                 payload: "cn"
             }
@@ -59,38 +65,5 @@ export const subMenuItems: NestedMenuItem[] = [
     {
         id: "logout",
         labelKey: "logout",
-        children: [
-            {
-                id: "vnlang",
-                labelKey: "vietnamese",
-                children: [
-                    {
-                        id: "vnlang",
-                        labelKey: "vietnamese",
-                        action: MENU_ACTIONS.CHANGE_LANG,
-                    },
-                    {
-                        id: "enlang",
-                        labelKey: "english",
-                        action: MENU_ACTIONS.CHANGE_LANG,
-                    },
-                    {
-                        id: "jalang",
-                        labelKey: "japanese",
-                        action: MENU_ACTIONS.CHANGE_LANG,
-                    },
-                    {
-                        id: "cnlang",
-                        labelKey: "chinese",
-                        action: MENU_ACTIONS.CHANGE_LANG,
-                    }
-                ]
-            },
-            {
-                id: "enlang",
-                labelKey: "english",
-                action: MENU_ACTIONS.CHANGE_LANG,
-            }
-        ]
     }
 ]

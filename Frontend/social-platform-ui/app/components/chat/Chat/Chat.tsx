@@ -52,7 +52,7 @@ export default function Chat({ messages, currentUserId }: ChatProps) {
                 return (
                     <Box key={msg.id} className="flex flex-col">
                         {showTimeDivider && (
-                            <Typography variant="caption" className="self-center text-gray-400 text-xs">
+                            <Typography variant="caption" className="self-center text-accent-foreground text-xs">
                                 {new Date(msg.time).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                             </Typography>
                         )}
@@ -62,6 +62,7 @@ export default function Chat({ messages, currentUserId }: ChatProps) {
                             isMe={msg.senderId === currentUserId}
                             position={determinePosition(messages, i)}
                             time={new Date(msg.time).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                            user=""
                         />
                     </Box>
                 )

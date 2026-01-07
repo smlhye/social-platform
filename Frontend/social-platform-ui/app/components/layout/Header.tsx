@@ -1,7 +1,6 @@
 "use client";
 
 import ThemeSwitch from "@/app/components/common/ThemeSwitch";
-import UserInfo from "@/app/components/common/UserInfo";
 import LanguageSelector from "../common/LanguageSelector";
 import { useI18n } from "@/app/lib/i18nContext";
 
@@ -15,7 +14,6 @@ export default function Header({ isSignedIn }: HeaderProps) {
         <header className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
             <h1 className="text-xl font-semibold">Social Platform</h1>
             <div className="flex items-center gap-2">
-                <UserInfo isSignedIn={isSignedIn} name="Tran Van Banh" />
                 <ThemeSwitch />
                 {/* Language Selector */}
                 <div className="text-center">
