@@ -39,38 +39,27 @@ export default function NestedMenu({
                 anchorOrigin={{ vertical: "top", horizontal: "right" }}
                 transformOrigin={{ vertical: "top", horizontal: "left" }}
                 sx={{
-                    pointerEvents: "none",
+                    pointerEvents: 'none'
                 }}
                 PaperProps={{
-                    className:
-                        "w-[280px] !shadow-md border border-gray-300 !rounded-xl p-2 ml-1.5 pointer-events-auto",
+                    style: { pointerEvents: 'auto' },
+                    className: "w-[280px] !shadow-md border border-gray-300 !rounded-xl p-2",
                 }}
             >
+
                 {items.map((item) => {
                     const label = t("chat." + item.labelKey);
                     return (
-                        <Box key={item.id}
+                        <Box
+                            key={item.id}
                             className={`p-2 rounded-md flex justify-between items-center cursor-pointer ${activeId === item.id ? "bg-muted" : ""
                                 }`}
                             onMouseEnter={(e) => {
                                 setActiveId(item.id);
-                                if (item.children) {
-                                    onOpenSubMenu?.(item.children, e.currentTarget);
-                                } else {
-                                    onOpenSubMenu?.(null, null);
-                                }
-                            }}
-                            onMouseLeave={() => {
-                                if (!item.children) {
-                                    onOpenSubMenu?.(null, null);
-                                    setActiveId(null);
-                                }
+                                onOpenSubMenu?.(item.children || null, e.currentTarget);
                             }}
                             onClick={() => {
-                                if (!item.children) {
-                                    onItemClick(item);
-                                    // onClose();
-                                }
+                                if (!item.children) onItemClick(item);
                             }}
                         >
                             <Stack direction="row" gap={1} alignItems="center">
@@ -79,8 +68,9 @@ export default function NestedMenu({
                             </Stack>
                             {item.children && <KeyboardArrowRightIcon />}
                         </Box>
-                    )
+                    );
                 })}
+
             </Popover>
         </ClickAwayListener>
     );

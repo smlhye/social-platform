@@ -22,12 +22,18 @@ function stringToGradient(name: string) {
 }
 
 
-function stringAvatar(name: string) {
+function stringAvatar(name = "") {
+    const parts = name.trim().split(" ").filter(Boolean);
+
+    const first = parts[0]?.[0] ?? "?";
+    const second = parts[1]?.[0] ?? "";
+
     return {
-        children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
-        gradient: stringToGradient(name),
+        children: (first + second).toUpperCase(),
+        gradient: stringToGradient(name || "default"),
     };
 }
+
 
 interface AvatarUIProps {
     avatar?: string,

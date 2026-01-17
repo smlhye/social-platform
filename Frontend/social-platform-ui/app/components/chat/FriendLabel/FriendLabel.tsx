@@ -7,13 +7,15 @@ interface FriendLabelProps {
     lastMes: string,
     time: string,
     read: boolean,
-    active?: boolean
+    active?: boolean,
+    onClick: () => void
 }
 
-export default function FriendLabel({ avatar, name, lastMes, time, read, active }: FriendLabelProps) {
+export default function FriendLabel({ avatar, name, lastMes, time, read, active, onClick }: FriendLabelProps) {
 
     return (
         <Box
+            onClick={onClick}
             width="100%"
             padding={1.5}
             display="flex"

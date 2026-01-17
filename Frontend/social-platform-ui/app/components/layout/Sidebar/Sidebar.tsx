@@ -10,6 +10,8 @@ import { NestedMenuItem, subMenuItems } from "../../common/Menu/submenuItems";
 import { MENU_ACTIONS } from "../../common/Menu";
 import { useI18n } from "@/app/lib/i18nContext";
 import { Locale } from "@/app/lib/i18n";
+import { AccountDialog } from "../../common/Dialog/AccountDialog";
+import { SettingsDialog } from "../../common/Dialog/SettingsDialog";
 
 export default function Sidebar() {
 
@@ -23,6 +25,7 @@ export default function Sidebar() {
     const { setLocale } = useI18n();
 
     const [accForm, setAccForm] = useState(false);
+    const [settings, setSettings] = useState(false);
 
     const handlers: Record<string, (item: SidebarItemType, e: React.MouseEvent<HTMLElement>) => void> = {
         home: (item) => {
@@ -53,6 +56,10 @@ export default function Sidebar() {
         switch (item.action) {
             case MENU_ACTIONS.OPEN_ACCOUNT:
                 setAccForm(true);
+                break;
+
+            case MENU_ACTIONS.SETTINGS:
+                setSettings(true);
                 break;
 
             case MENU_ACTIONS.CHANGE_LANG:
@@ -114,6 +121,9 @@ export default function Sidebar() {
                     }}
                 />
             ))}
+
+            <AccountDialog />
+            <SettingsDialog open={settings} onClose={() => { setSettings(false) }} />
         </Box>
     )
 }

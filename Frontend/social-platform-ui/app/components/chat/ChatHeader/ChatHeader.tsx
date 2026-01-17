@@ -4,14 +4,21 @@ import { IoIosCall } from "react-icons/io";
 import { IoIosVideocam } from "react-icons/io";
 import { IoIosMore } from "react-icons/io";
 
-export default function ChatHeader() {
+interface ChatHeaderProps {
+    id: string,
+    name: string,
+    avatar?: string,
+    active: boolean
+}
+
+export default function ChatHeader({ id, name, avatar, active }: ChatHeaderProps) {
     return (
         <Box className="w-full p-3 flex justify-between">
             <Stack direction="row" className="flex items-center gap-2">
-                <AvatarUI name="Hồ Đông Huy" />
+                <AvatarUI name={avatar ? avatar : name} />
                 <Stack direction="column">
                     <p className={`flex-1 min-w-0 truncate text-base font-semibold`}>
-                        Hồ Đông Huy
+                        {name}
                     </p>
                     <p className={`flex-1 min-w-0 truncate text-xs`}>
                         Đang hoạt động

@@ -7,7 +7,7 @@ import { ChatInput } from "../app/components/chat/ChatInput";
 import { Box, CircularProgress } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useI18n } from "./lib/i18nContext";
-import Chat, { testMessages } from "./components/chat/Chat/Chat";
+import Chat from "./components/chat/Chat/Chat";
 import "flag-icons/css/flag-icons.min.css";
 
 export type MessagePosition = "single" | "first" | "middle" | "last"
@@ -17,6 +17,63 @@ export interface Message {
   content: string
   senderId: string,
   time: string
+}
+
+export const testConversations: Record<string, Message[]> = {
+  u1: [
+    {
+      id: "u1-1",
+      content: "Chào Huy!",
+      senderId: "u1",
+      time: "2026-01-05T08:00:00.000Z",
+    },
+    {
+      id: "u1-2",
+      content: "Chào bạn, lâu quá không gặp 😄",
+      senderId: "me",
+      time: "2026-01-05T08:02:00.000Z",
+    },
+    {
+      id: "u1-3",
+      content: "Tối nay đi cà phê không?",
+      senderId: "u1",
+      time: "2026-01-05T08:03:00.000Z",
+    },
+  ],
+
+  u2: [
+    {
+      id: "u2-1",
+      content: "Mai nộp bài nha",
+      senderId: "u2",
+      time: "2026-01-04T20:00:00.000Z",
+    },
+    {
+      id: "u2-2",
+      content: "Ok mình nhớ rồi",
+      senderId: "me",
+      time: "2026-01-04T20:01:00.000Z",
+    },
+  ],
+
+  u3: [
+    {
+      id: "u3-1",
+      content: "Gửi mình file báo cáo với",
+      senderId: "u3",
+      time: "2026-01-03T09:00:00.000Z",
+    },
+  ],
+}
+
+interface User {
+  id: string;
+  avatar: string;
+  name: string;
+  lastMes: string;
+  time: string;
+  read: boolean;
+  active: boolean;
 }
 
 export function getMessagePosition(
@@ -36,56 +93,49 @@ export function getMessagePosition(
   return "last"
 }
 
+export const testUsers = [
+  {
+    id: "u1",
+    avatar: "",
+    name: "Nguyễn Văn A",
+    lastMes: "Ê tối nay đi cà phê không?",
+    time: "20:31",
+    read: false,
+    active: true,
+  },
+  {
+    id: "u2",
+    avatar: "",
+    name: "Trần Thị B",
+    lastMes: "Ok để mai nha",
+    time: "19:12",
+    read: true,
+    active: false,
+  },
+  {
+    id: "u3",
+    avatar: "",
+    name: "Lê Văn C",
+    lastMes: "Gửi mình file với",
+    time: "Hôm qua",
+    read: true,
+    active: false,
+  },
+  {
+    id: "u4",
+    avatar: "",
+    name: "Phạm Thị D",
+    lastMes: "😂😂😂",
+    time: "Thứ 2",
+    read: false,
+    active: false,
+  },
+];
+
+
 export default function Home() {
-  const users = [
-    { name: "Hồ Đông Huy", lastMes: "Ok không có gì nha bạn", time: "1 phút", read: false, },
-    { name: "Nguyễn Văn An", lastMes: "Ê mà cái bài tập hôm quá nó khó vãi luôn á bạn làm được không", time: "10 phút", read: false },
-    { avatar: "/otisadminbg.jpeg", name: "Lê Văn An", lastMes: "Hihi", time: "1 giờ", read: true, active: true },
-    { name: "Hồ Đông Huy", lastMes: "Ok không có gì nha bạn", time: "1 phút", read: false },
-    { name: "Nguyễn Văn An", lastMes: "Ê mà cái bài tập hôm quá nó khó vãi luôn á bạn làm được không", time: "10 phút", read: false },
-    { avatar: "/otisadminbg.jpeg", name: "Lê Văn An", lastMes: "Hihi", time: "1 giờ", read: true },
-    { name: "Hồ Đông Huy", lastMes: "Ok không có gì nha bạn", time: "1 phút", read: false },
-    { name: "Nguyễn Văn An", lastMes: "Ê mà cái bài tập hôm quá nó khó vãi luôn á bạn làm được không", time: "10 phút", read: false },
-    { avatar: "/otisadminbg.jpeg", name: "Lê Văn An", lastMes: "Hihi", time: "1 giờ", read: true },
-    { name: "Hồ Đông Huy", lastMes: "Ok không có gì nha bạn", time: "1 phút", read: false },
-    { name: "Nguyễn Văn An", lastMes: "Ê mà cái bài tập hôm quá nó khó vãi luôn á bạn làm được không", time: "10 phút", read: false },
-    { avatar: "/otisadminbg.jpeg", name: "Lê Văn An", lastMes: "Hihi", time: "1 giờ", read: true },
-    { name: "Hồ Đông Huy", lastMes: "Ok không có gì nha bạn", time: "1 phút", read: false },
-    { name: "Nguyễn Văn An", lastMes: "Ê mà cái bài tập hôm quá nó khó vãi luôn á bạn làm được không", time: "10 phút", read: false },
-    { avatar: "/otisadminbg.jpeg", name: "Lê Văn An", lastMes: "Hihi", time: "1 giờ", read: true }
-  ]
+  const [selectedFriend, setSelectedFriend] = useState<User | null>(null);
 
-  const myId = "me"
-
-  const messages: Message[] = [
-    { id: "1", content: "Ê mày", senderId: "me", time: "12:09" },
-    { id: "2", content: "Gì vậy", senderId: "me", time: "12:09" },
-    { id: "3", content: "Tối nay rảnh không", senderId: "me", time: "12:09" },
-
-    { id: "4", content: "Rảnh", senderId: "u1", time: "12:09" },
-    { id: "5", content: "Có gì không", senderId: "u1", time: "12:09" },
-
-    { id: "6", content: "Đi cà phê", senderId: "me", time: "12:09" },
-    { id: "7", content: "Tối nay ra đánh game, chơi lên chiến thần 100 sao luôn quá đã hahaha", senderId: "me", time: "12:09" },
-    { id: "8", content: "Ê mày", senderId: "me", time: "12:09" },
-    { id: "9", content: "Gì vậy", senderId: "me", time: "12:09" },
-    { id: "10", content: "Tối nay rảnh không", senderId: "me", time: "12:09" },
-
-    { id: "11", content: "Rảnh", senderId: "u1", time: "12:09" },
-    { id: "12", content: "Có gì không", senderId: "u1", time: "12:09" },
-
-    { id: "13", content: "Đi cà phê", senderId: "me", time: "12:09" },
-    { id: "14", content: "Tối nay ra đánh game, chơi lên chiến thần 100 sao luôn quá đã hahaha", senderId: "me", time: "12:09" },
-    { id: "15", content: "Ê mày", senderId: "me", time: "12:09" },
-    { id: "16", content: "Gì vậy", senderId: "me", time: "12:09" },
-    { id: "17", content: "Tối nay rảnh không", senderId: "me", time: "12:09" },
-
-    { id: "18", content: "Rảnh", senderId: "u1", time: "12:09" },
-    { id: "19", content: "Có gì không", senderId: "u1", time: "12:09" },
-
-    { id: "20", content: "Đi cà phê", senderId: "me", time: "12:09" },
-    { id: "21", content: "Tối nay ra đánh game, chơi lên chiến thần 100 sao luôn quá đã hahaha", senderId: "me", time: "12:09" }
-  ]
 
   const { t } = useI18n();
 
@@ -95,6 +145,13 @@ export default function Home() {
       setLoading(false);
     }, 2000)
   }, [])
+
+  useEffect(() => {
+    if (!selectedFriend && testUsers.length > 0) {
+      setSelectedFriend(testUsers[0])
+    }
+  }, [])
+
 
   return (
     <div className="flex h-full overflow-hidden">
@@ -111,15 +168,16 @@ export default function Home() {
                 <FriendLabelLoading key={i} />
               ))
             ) : (
-              users.map((user, index) => (
+              testUsers.map((user) => (
                 <FriendLabel
-                  key={index}
+                  key={user.id}
                   avatar={user.avatar}
                   name={user.name}
                   lastMes={user.lastMes}
                   time={user.time}
                   read={user.read}
-                  active={user.active}
+                  active={selectedFriend?.id === user.id}
+                  onClick={() => setSelectedFriend(user)}
                 />
               ))
             )
@@ -141,7 +199,12 @@ export default function Home() {
 
         <div className="shrink-0 border-b border-gray-200 dark:border-gray-700">
           <ChatHeader
+            id={selectedFriend?.id ?? ""}
+            name={selectedFriend?.name ?? ""}
+            avatar={selectedFriend?.avatar ?? ""}
+            active={selectedFriend?.active ?? false}
           />
+
         </div>
 
         {/* Messages */}
@@ -162,7 +225,10 @@ export default function Home() {
                 />
               ))} */}
 
-              <Chat messages={testMessages} currentUserId="me" />
+              <Chat
+                messages={testConversations[selectedFriend?.id ?? ""] ?? []}
+                currentUserId="me"
+              />
             </div>
           )}
 
