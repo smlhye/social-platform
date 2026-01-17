@@ -1,4 +1,5 @@
 export const APP = {
     NAME: 'Social Platform',
-    VERSION: '1.0.0',
+    VERSION: 'v1.0.0',
+    PREFIX: 'api',
 };

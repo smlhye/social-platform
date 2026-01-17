@@ -1,16 +1,30 @@
 import { Module } from "@nestjs/common";
-import { ConfigModule } from "@nestjs/config";
-import { envValidationSchema } from "./env.validation";
-import configArray from '../config';
+import { ConfigService, ConfigModule as NestConfigModule } from "@nestjs/config";
+import * as dotenv from 'dotenv';
+import { EnvSchema } from "./env.schema";
+import { treeifyError } from "zod";
+import { configGetters } from "./app.config";
 
 @Module({
     imports: [
-        ConfigModule.forRoot({
+        NestConfigModule.forRoot({
             isGlobal: true,
-            envFilePath: '.env',
-            load: [configArray],
-            validationSchema: envValidationSchema,
+            load: [() => { dotenv.config(); return {}; }],
+            validate: (env) => {
+                const result = EnvSchema.safeParse(env);
+                if (!result.success) {
+                    console.error('Invalid ENV config:');
+                    console.error(treeifyError(result.error));
+                    process.exit(1);
+                }
+                return result.data;
+            },
         })
-    ]
-})
-export class AppConfigModule { }
+    ],
+    providers: configGetters.map(({ token, factory }) => ({
+        provide: token,
+        inject: [ConfigService],
+        useFactory: factory,
+    })),
+    exports: configGetters.map(({ token }) => token),
+}) export class ConfigModule { }
