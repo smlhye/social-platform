@@ -4,7 +4,7 @@ import { sidebarItems, SidebarItemType } from "./sidebarItems";
 import SidebarItem from "./SidebarItem";
 import { AvatarUI } from "../../common/Avatar";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import NestedMenu from "../../common/Menu/NestedMenu";
 import { NestedMenuItem, subMenuItems } from "../../common/Menu/submenuItems";
 import { MENU_ACTIONS } from "../../common/Menu";
@@ -12,6 +12,7 @@ import { useI18n } from "@/app/lib/i18nContext";
 import { Locale } from "@/app/lib/i18n";
 import { AccountDialog } from "../../common/Dialog/AccountDialog";
 import { SettingsDialog } from "../../common/Dialog/SettingsDialog";
+import { usePathname, useRouter } from "next/navigation";
 
 export default function Sidebar() {
 
@@ -22,6 +23,14 @@ export default function Sidebar() {
         anchorEl: HTMLElement;
     }[]>([]);
 
+    const router = useRouter();
+    const pathname = usePathname();
+    useEffect(() => {
+        if (pathname === "/") setActiveId("home");
+        else if (pathname.startsWith("/messages")) setActiveId("mes");
+        else if (pathname.startsWith("/contact")) setActiveId("contact");
+    }, [pathname]);
+
     const { setLocale } = useI18n();
 
     const [accForm, setAccForm] = useState(false);
@@ -30,12 +39,15 @@ export default function Sidebar() {
     const handlers: Record<string, (item: SidebarItemType, e: React.MouseEvent<HTMLElement>) => void> = {
         home: (item) => {
             setActiveId(item.id);
+            router.push("/");
         },
         mes: (item) => {
             setActiveId(item.id);
+            router.push("/messages");
         },
         contact: (item) => {
             setActiveId(item.id);
+            router.push("/contact");
         },
         setting: (item, e) => {
             setActiveIdAction(item.id);
@@ -122,7 +134,7 @@ export default function Sidebar() {
                 />
             ))}
 
-            <AccountDialog />
+            <AccountDialog open={accForm} onClose={() => setAccForm(false)} />
             <SettingsDialog open={settings} onClose={() => { setSettings(false) }} />
         </Box>
     )
