@@ -35,7 +35,6 @@ export default function RootLayout({ children }: RootLayoutProps) {
         flex flex-col`}
       >
         <I18nProvider>
-          <Header isSignedIn={isSignedIn} />
           <main className="flex-1 overflow-hidden min-h-0">{children}</main>
         </I18nProvider> 
       </body>

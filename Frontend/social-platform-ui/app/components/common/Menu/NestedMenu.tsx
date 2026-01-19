@@ -3,6 +3,8 @@ import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import { NestedMenuItem } from "./submenuItems";
 import { useState } from "react";
 import { useI18n } from "@/app/lib/i18nContext";
+import { MENU_ACTIONS } from "./menuAction";
+import { FaCheck } from "react-icons/fa6";
 
 interface NestedMenuProps {
     anchorEl: HTMLElement | null;
@@ -25,7 +27,7 @@ export default function NestedMenu({
     onOpenSubMenu,
 }: NestedMenuProps) {
     const [activeId, setActiveId] = useState<string | null>(null);
-    const { t } = useI18n();
+    const { t, locale } = useI18n();
 
     return (
         <ClickAwayListener onClickAway={onClose}>
@@ -41,6 +43,7 @@ export default function NestedMenu({
                 sx={{
                     pointerEvents: 'none'
                 }}
+                onWheel={(e) => e.stopPropagation()}
                 PaperProps={{
                     style: { pointerEvents: 'auto' },
                     className: "w-[280px] !shadow-md border border-gray-300 !rounded-xl p-2",
@@ -49,14 +52,28 @@ export default function NestedMenu({
 
                 {items.map((item) => {
                     const label = t("chat." + item.labelKey);
+
+                    const isLangActive =
+                        item.action === MENU_ACTIONS.CHANGE_LANG &&
+                        item.payload === locale;
+
                     return (
                         <Box
                             key={item.id}
-                            className={`p-2 rounded-md flex justify-between items-center cursor-pointer ${activeId === item.id ? "bg-muted" : ""
-                                }`}
+                            className={`
+                                p-2 rounded-md flex justify-between items-center cursor-pointer
+                                ${isLangActive ? "bg-primary/10 text-primary font-medium" : ""}
+                                ${activeId === item.id && !isLangActive ? "bg-muted" : ""}
+                            `}
                             onMouseEnter={(e) => {
                                 setActiveId(item.id);
                                 onOpenSubMenu?.(item.children || null, e.currentTarget);
+                            }}
+                            onMouseLeave={() => {
+                                if (!item.children) {
+                                    setActiveId(null);
+                                    onOpenSubMenu?.(null, null);
+                                }
                             }}
                             onClick={() => {
                                 if (!item.children) onItemClick(item);
@@ -67,6 +84,7 @@ export default function NestedMenu({
                                 <span>{label}</span>
                             </Stack>
                             {item.children && <KeyboardArrowRightIcon />}
+                            {isLangActive && <span className="text-primary text-sm"><FaCheck /></span>}
                         </Box>
                     );
                 })}

@@ -235,7 +235,7 @@ export default function Home() {
         </div>
 
         {/* Input box */}
-        <div className="shrink-0 border-t border-gray-200 dark:border-gray-700 p-4">
+        <div className="shrink-0 border-t border-gray-200 dark:border-gray-700 p-2">
 
           <ChatInput />
           {/* <input
