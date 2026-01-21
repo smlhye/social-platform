@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 export enum Gender {
     MALE = 'male',
@@ -26,7 +26,7 @@ export class User {
     @Column({ length: 100, nullable: true, unique: true })
     email: string;
 
-    @Column({ length: 20, nullable: true, unique: true })
+    @Column({ name: 'phone_number', length: 20, nullable: true, unique: true })
     phoneNumber?: string;
 
     @Column({ length: 50, unique: true })
@@ -35,12 +35,15 @@ export class User {
     @Column()
     password: string;
 
-    @Column({ default: false })
-    isDelete: boolean;
+    @Column({ name: 'isDeleted', default: false })
+    isDeleted: boolean;
 
     @CreateDateColumn({ name: 'created_at' })
     createdAt: Date;
 
     @UpdateDateColumn({ name: 'updated_at' })
     updatedAt: Date;
+
+    @DeleteDateColumn({name: 'deleted_at'})
+    deletedAt: Date;
 }
