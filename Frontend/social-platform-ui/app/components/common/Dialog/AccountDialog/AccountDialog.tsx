@@ -2,6 +2,7 @@
 
 import { Dialog, DialogContent, Box, Button } from "@mui/material";
 import { useState } from "react";
+import AccountInfo from "./sections/AccountInfo";
 
 interface AccountDialogProps {
     open: boolean;
@@ -12,13 +13,18 @@ export default function AccountDialog({ open, onClose }: AccountDialogProps) {
     const [page, setPage] = useState<"a" | "b">("a");
 
     return (
-        <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
-            <DialogContent className="p-0">
+        <Dialog open={open} onClose={onClose} fullWidth maxWidth="xs"
+            PaperProps={{
+                sx: {
+                    borderRadius: '15px'
+                }
+            }}>
+            <DialogContent sx={{ padding: 1 }}>
                 {/* CONTAINER */}
                 <Box
                     sx={{
                         position: "relative",
-                        height: 300,
+                        height: 600,
                         overflow: "hidden",
                     }}
                 >
@@ -27,24 +33,15 @@ export default function AccountDialog({ open, onClose }: AccountDialogProps) {
                         sx={{
                             position: "absolute",
                             inset: 0,
-                            backgroundColor: "#fde68a", // vàng
                             transition:
                                 "transform 300ms cubic-bezier(0.4, 0, 0.2, 1)",
                             transform:
                                 page === "b"
                                     ? "translateX(-30%)"
                                     : "translateX(0%)",
-                            padding: 2,
                         }}
                     >
-                        <h3>Page A</h3>
-                        <p>Trang cũ (màu vàng)</p>
-                        <Button
-                            variant="contained"
-                            onClick={() => setPage("b")}
-                        >
-                            Đi tới Page B
-                        </Button>
+                        <AccountInfo onClick={() => setPage("b")}/>
                     </Box>
 
                     {/* PAGE B (mới) */}

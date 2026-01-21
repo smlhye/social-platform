@@ -87,28 +87,30 @@ export default function Sidebar() {
         <Box
             width="var(--sidebar-width)"
             height="100vh"
-            className="flex flex-col items-center py-3 gap-3 border-r border-gray-200 dark:border-gray-700"
+            className="flex flex-col items-center py-4 gap-3 border-r border-gray-200 dark:border-gray-700"
         >
-            <Image
+            {/* <Image
                 className="mb-3 cursor-pointer"
                 src="/freepngimng.png"
                 alt="Avatar"
                 width={40}
-                height={40} />
+                height={40} /> */}
             <AvatarUI
                 name="Hồ Đông Huy"
             />
-            {sidebarItems.map((item) => (
-                <SidebarItem
-                    key={item.id}
-                    icon={item.icon}
-                    iconActive={item.iconActive}
-                    active={(item.type === "nav" && activeId === item.id) ||  // nav active
-                        (item.type === "action" && activeIdAction === item.id)}
-                    label={item.label}
-                    onClick={(e) => handleClickItem(item, e)}
-                />
-            ))}
+            <Box className="mt-2 flex flex-col">
+                {sidebarItems.map((item) => (
+                    <SidebarItem
+                        key={item.id}
+                        icon={item.icon}
+                        active={(item.type === "nav" && activeId === item.id) ||  // nav active
+                            (item.type === "action" && activeIdAction === item.id)}
+                        label={item.label}
+                        onClick={(e) => handleClickItem(item, e)}
+                        isDivider={item.isDivider}
+                    />
+                ))}
+            </Box>
             {menuStack.map((menu, index) => (
                 <NestedMenu
                     key={index}

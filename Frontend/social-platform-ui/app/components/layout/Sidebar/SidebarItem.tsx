@@ -2,26 +2,33 @@ import { Box, Tooltip } from "@mui/material";
 
 interface SidebarItemProps {
     icon: React.ReactNode,
-    iconActive: React.ReactNode,
     active?: boolean,
     onClick?: (e: React.MouseEvent<HTMLElement>) => void,
-    label?: string
+    label?: string,
+    isDivider?: boolean
 }
 
-export default function SidebarItem({ icon, iconActive, active, onClick, label }: SidebarItemProps) {
+export default function SidebarItem({ icon, active, onClick, label, isDivider = false }: SidebarItemProps) {
     return (
-        <Box
-            width="var(--sidebar-length)"
-            height="var(--sidebar-length)"
-            onClick={onClick}
-            className={`flex flex-col justify-center items-center rounded-md p-1 gap-0.5 cursor-pointer
-                ${active ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"}`}
+        <Box className="w-full flex flex-col justify-center items-center mb-3">
+            {isDivider && (
+                <Box
+                    className="w-[var(--sidebar-length)] h-[1.2px] mb-4 bg-muted-foreground"
+                />
+            )}
+            <Box
+                width="var(--sidebar-length)"
+                height="var(--sidebar-length)"
+                onClick={onClick}
+                className={`flex flex-col justify-center items-center rounded-md gap-0.5 cursor-pointer
+                ${active ? "bg-sub-background text-primary-foreground" : "bg-transparent text-muted-foreground"}`}
 
-        >
-            <div className="text-2xl">
-                {active ? iconActive : icon}
-            </div>
-            {/* <p className="text-xs">{label}</p> */}
+            >
+                <div className="text-2xl">
+                    {icon}
+                </div>
+                {/* <p className="text-xs">{label}</p> */}
+            </Box>
         </Box>
     )
 }
