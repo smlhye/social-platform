@@ -87,7 +87,7 @@ export default function Sidebar() {
         <Box
             width="var(--sidebar-width)"
             height="100vh"
-            className="flex flex-col items-center py-4 gap-3 border-r border-gray-200 dark:border-gray-700"
+            className="flex flex-col items-center py-4 gap-3"
         >
             {/* <Image
                 className="mb-3 cursor-pointer"

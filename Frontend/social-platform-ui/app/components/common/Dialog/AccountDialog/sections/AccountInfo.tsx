@@ -1,3 +1,4 @@
+"use client"
 import { Box, Stack } from "@mui/material";
 import Image from "next/image";
 import { AvatarUI } from "../../../Avatar";
@@ -8,12 +9,18 @@ import { MdOutlineMail } from "react-icons/md";
 import { FormInput } from "@/app/components/chat/ChatInput";
 import InformationItem from "../components/InfomationItem";
 import { CustomSwitch } from "../../../ThemeSwitch";
+import { useState } from "react";
+import CustomTabs from "../../../Tab/CustomTabs";
+import { CustomTab } from "../../../Tab";
+import { CgProfile } from "react-icons/cg";
 
 interface AccountInfoProps {
     onClick: () => void
 }
 
 export default function AccountInfo({ onClick }: AccountInfoProps) {
+    const [tab, setTab] = useState(0);
+
     return (
         <Stack direction="column" className="w-full gap-3">
             <Box className="relative w-full h-[150px] rounded-mes">
@@ -48,20 +55,27 @@ export default function AccountInfo({ onClick }: AccountInfoProps) {
                             </div>
                         </Stack>
                     </Box>
-                    <Stack direction="column" className="mt-3 gap-3">
-                        <InformationItem title="FullName" >
-                            <FormInput width={"50%"} onChange={(e) => e.target.value} value={"Hồ Đông"} />
-                            <FormInput width={"50%"} onChange={(e) => e.target.value} value={"Huy"} />
-                        </InformationItem>
-                        <InformationItem title="Email" >
-                            <FormInput onChange={(e) => e.target.value} value={"huynguyennhonhai@gmail.com"} />
-                        </InformationItem>
-                        <InformationItem title="Notification" >
-                            <CustomSwitch />
-                        </InformationItem>
-                    </Stack>
-                </Stack>
+                    <CustomTabs value={tab} onChange={(_, v) => setTab(v)}>
+                        <CustomTab label="Profile" icon={<CgProfile />} iconPosition="start" />
+                        <CustomTab label="Security" />
+                        <CustomTab label="About" />
+                    </CustomTabs>
+                    {tab === 0 && (
+                        <Stack direction="column" className="mt-3 gap-3">
+                            <InformationItem title="FullName" >
+                                <FormInput width={"50%"} onChange={(e) => e.target.value} value={"Hồ Đông"} />
+                                <FormInput width={"50%"} onChange={(e) => e.target.value} value={"Huy"} />
+                            </InformationItem>
+                            <InformationItem title="Email" >
+                                <FormInput onChange={(e) => e.target.value} value={"huynguyennhonhai@gmail.com"} />
+                            </InformationItem>
+                            <InformationItem title="Notification" >
+                                <CustomSwitch />
+                            </InformationItem>
+                        </Stack>
+                    )}
 
+                </Stack>
             </Box>
         </Stack>
     )

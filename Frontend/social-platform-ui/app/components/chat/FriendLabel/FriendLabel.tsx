@@ -23,8 +23,8 @@ export default function FriendLabel({ avatar, name, lastMes, time, read, active,
             alignItems="center"
             gap={1.5}
             className={`
-                cursor-pointer rounded-sm
-                ${active ? "bg-accent" : "bg-transparent hover:bg-muted"}
+                cursor-pointer rounded-md shadow-float
+                ${active ? "bg-accent" : "bg-background hover:bg-muted"}
             `}>
             <AvatarUI
                 avatar={avatar}
@@ -40,10 +40,18 @@ export default function FriendLabel({ avatar, name, lastMes, time, read, active,
                     </p>
                 </Box>
                 <Box width="100%" display="flex" flexDirection="row" justifyContent="space-between" alignItems="center" gap={1.5} paddingRight={1.5}>
-                    <p className={`truncate text-sm ${!read ? "text-secondary-foreground" : "text-accent-foreground"}`}>
+                    <p className={`truncate text-sm pr-2 ${!read ? "text-secondary-foreground" : "text-accent-foreground"}`}>
                         {lastMes}</p>
                     {!read && (
-                        <Badge badgeContent={4} color="error" />
+                        <Badge
+                            badgeContent={"99+"} className=""
+                            sx={{
+                                "& .MuiBadge-badge": {
+                                    backgroundColor: "var(--color-chat-warning)",
+                                    color: "#fff",
+                                },
+                            }}
+                        />
                     )}
                 </Box>
             </Stack>

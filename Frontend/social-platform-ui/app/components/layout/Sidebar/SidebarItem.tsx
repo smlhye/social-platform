@@ -21,7 +21,7 @@ export default function SidebarItem({ icon, active, onClick, label, isDivider = 
                 height="var(--sidebar-length)"
                 onClick={onClick}
                 className={`flex flex-col justify-center items-center rounded-md gap-0.5 cursor-pointer
-                ${active ? "bg-sub-background text-primary-foreground" : "bg-transparent text-muted-foreground"}`}
+                ${active ? "bg-accent text-foreground" : "bg-transparent text-muted-foreground"}`}
 
             >
                 <div className="text-2xl">

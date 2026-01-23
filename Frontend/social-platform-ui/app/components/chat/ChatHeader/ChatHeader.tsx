@@ -1,17 +1,19 @@
 import { Box, IconButton, Stack } from "@mui/material";
 import { AvatarUI } from "../../common/Avatar";
-import { IoIosCall } from "react-icons/io";
-import { IoIosVideocam } from "react-icons/io";
+import { IoCallOutline } from "react-icons/io5";
+import { IoVideocamOutline } from "react-icons/io5";
 import { IoIosMore } from "react-icons/io";
+import { BsLayoutSidebarReverse } from "react-icons/bs";
 
 interface ChatHeaderProps {
     id: string,
     name: string,
     avatar?: string,
-    active: boolean
+    active: boolean,
+    onToggle: () => void
 }
 
-export default function ChatHeader({ id, name, avatar, active }: ChatHeaderProps) {
+export default function ChatHeader({ id, name, avatar, active, onToggle }: ChatHeaderProps) {
     return (
         <Box className="w-full p-3 flex justify-between">
             <Stack direction="row" className="flex items-center gap-2">
@@ -25,15 +27,18 @@ export default function ChatHeader({ id, name, avatar, active }: ChatHeaderProps
                     </p>
                 </Stack>
             </Stack>
-            <Stack direction="row">
+            <Stack direction="row" className="gap-1">
                 <IconButton>
-                    <IoIosCall />
+                    <IoCallOutline />
                 </IconButton>
                 <IconButton>
-                    <IoIosVideocam />
+                    <IoVideocamOutline />
                 </IconButton>
                 <IconButton>
                     <IoIosMore />
+                </IconButton>
+                <IconButton onClick={onToggle}>
+                    <BsLayoutSidebarReverse />
                 </IconButton>
             </Stack>
         </Box>

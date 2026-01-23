@@ -7,7 +7,7 @@
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
 
-    --sub-background: 0 0% 100%;
+    --sub-background: 200 33.33% 98.24%;
     --sub-foreground: 222.2 84% 4.9%;
 
     --card: 0 0% 100%;
@@ -43,6 +43,8 @@
 
     --sidebar-width: 75px;
     --sidebar-length: 45px;
+
+    --chat-warning: 348.92 97.01% 60.59%
   }
 
   .dark {
@@ -128,6 +130,8 @@
   --radius-md: var(--radius);
   --radius-lg: calc(var(--radius) + 2px);
   --radius-mes: var(--radius-message);
+
+  --color-chat-warning: hsl(var(--chat-warning));
 }
 
 /* @media (prefers-color-scheme: dark) {
@@ -140,6 +144,41 @@
 body {
   /* background: var(--background);
   color: var(--foreground); */
-  font-family: Arial, Helvetica, sans-serif;
-  @apply bg-background text-foreground font-sans;
+  /* font-family: Arial, Helvetica, sans-serif; */
+  /* @apply bg-background text-foreground font-sans; */
+  @apply bg-background text-foreground;
+  font-family: -apple-system, system-ui, sans-serif !important;
+}
+
+/* Reaction Floating */
+@keyframes floatUp {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 0.9;
+  }
+
+  100% {
+    transform: translateY(-300px) scale(1.4);
+    opacity: 0;
+  }
+}
+
+.reaction {
+  position: absolute;
+  bottom: 20px;
+  animation: floatUp 3s ease-out forwards;
+  pointer-events: none;
+  user-select: none;
+}
+
+.shadow-float {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.shadow-top {
+  box-shadow: 0 -6px 10px -6px rgba(0, 0, 0, 0.12);
+}
+
+.shadow-bottom {
+  box-shadow: 0 6px 12px -6px rgba(0, 0, 0, 0.15);
 }

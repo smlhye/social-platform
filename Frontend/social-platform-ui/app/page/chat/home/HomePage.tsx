@@ -1,3 +1,4 @@
+import { ReactionFloating } from "@/app/components/chat/ReactionFloating";
 import { Box } from "@mui/material";
 
 export default function HomePage() {
@@ -10,8 +11,7 @@ export default function HomePage() {
                     với bạn bè, gia đình và những người quan trọng — mọi lúc, mọi nơi.</span>
             </Box>
             <Box
-                className="
-                    absolute top-0 right-0 h-full w-[60%]"
+                className="absolute top-0 right-0 h-full w-[60%] pl-2"
                 style={{
                     background: `
                         linear-gradient(135deg,
@@ -22,7 +22,9 @@ export default function HomePage() {
 
                     clipPath: "ellipse(80% 100% at 100% 50%)",
                 }}
-            />
+            >
+                <ReactionFloating />
+            </Box>
         </Box>
     )
 }

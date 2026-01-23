@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { useI18n } from "@/app/lib/i18nContext";
 import Chat from "@/app/components/chat/Chat/Chat";
 import "flag-icons/css/flag-icons.min.css";
+import { Infobar } from "@/app/components/layout/Infobar";
 
 export type MessagePosition = "single" | "first" | "middle" | "last"
 
@@ -135,6 +136,7 @@ export default function MessagesPage() {
     const [selectedFriend, setSelectedFriend] = useState<User | null>(null);
     const { t } = useI18n();
     const [loading, setLoading] = useState(true);
+    const [infoBar, setInfoBar] = useState(false);
 
     useEffect(() => {
         const time = setTimeout(() => {
@@ -151,9 +153,9 @@ export default function MessagesPage() {
     return (
         <div className="flex h-full overflow-hidden">
             {/* Friend list */}
-            <aside className="hidden sm:flex flex-col w-85 bg-background border-r border-gray-200 dark:border-gray-700 p-4">
+            <aside className="hidden sm:flex flex-col w-75 bg-sub-background p-4">
                 <h2 className="text-xl font-semibold mb-2">{t("chat.chat")}</h2>
-                <ul className="flex-1 flex flex-col gap-2 overflow-y-auto">
+                <ul className="flex-1 flex flex-col gap-3 overflow-y-auto">
                     {loading
                         ? Array.from({ length: 4 }).map((_, i) => (
                             <FriendLabelLoading key={i} />
@@ -174,34 +176,51 @@ export default function MessagesPage() {
             </aside>
 
             {/* Chat area */}
-            <main className="flex-1 flex flex-col justify-between">
-                <div className="shrink-0 border-b border-gray-200 dark:border-gray-700">
-                    <ChatHeader
-                        id={selectedFriend?.id ?? ""}
-                        name={selectedFriend?.name ?? ""}
-                        avatar={selectedFriend?.avatar ?? ""}
-                        active={selectedFriend?.active ?? false}
-                    />
+            <main className="flex-1 flex">
+
+                <div className="flex-1 flex flex-col">
+                    <div className="shrink-0 border-gray-200 dark:border-gray-700 shadow-bottom">
+                        <ChatHeader
+                            id={selectedFriend?.id ?? ""}
+                            name={selectedFriend?.name ?? ""}
+                            avatar={selectedFriend?.avatar ?? ""}
+                            active={selectedFriend?.active ?? false}
+                            onToggle={() => setInfoBar(!infoBar)}
+                        />
+                    </div>
+
+                    <div className="flex-1 p-6 overflow-y-auto flex flex-col-reverse">
+                        {loading ? (
+                            <div className="h-full flex items-center justify-center">
+                                <CircularProgress />
+                            </div>
+                        ) : (
+                            <div className="flex flex-col max-w-4xl mx-auto w-full">
+                                <Chat
+                                    messages={testConversations[selectedFriend?.id ?? ""] ?? []}
+                                    currentUserId="me"
+                                />
+                            </div>
+                        )}
+                    </div>
+
+                    <div className="shrink-0 shadow-top p-2">
+                        <ChatInput />
+                    </div>
                 </div>
 
-                <div className="flex-1 p-6 overflow-y-auto flex flex-col-reverse">
-                    {loading ? (
-                        <div className="h-full flex items-center justify-center">
-                            <CircularProgress />
-                        </div>
-                    ) : (
-                        <div className="flex flex-col max-w-4xl mx-auto w-full">
-                            <Chat
-                                messages={testConversations[selectedFriend?.id ?? ""] ?? []}
-                                currentUserId="me"
-                            />
-                        </div>
-                    )}
+                <div
+                    className={`
+    shrink-0 overflow-hidden
+    transition-[max-width] duration-300 ease-in-out
+    ${infoBar ? "max-w-[340px]" : "max-w-0"}
+  `}
+                >
+                    <div className="w-[340px] h-full">
+                        <Infobar />
+                    </div>
                 </div>
 
-                <div className="shrink-0 border-t border-gray-200 dark:border-gray-700 p-2">
-                    <ChatInput />
-                </div>
             </main>
         </div>
     );
