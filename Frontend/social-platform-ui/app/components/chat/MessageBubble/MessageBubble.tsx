@@ -1,5 +1,6 @@
 import { Box } from "@mui/material"
 import { AvatarUI } from "../../common/Avatar"
+import { motion } from "framer-motion"
 
 export type MessagePosition = "single" | "first" | "middle" | "last"
 
@@ -9,6 +10,7 @@ interface MessageBubbleProps {
     position?: MessagePosition,
     time: string,
     user: string,
+    isNew?: boolean
 }
 
 export default function MessageBubble({
@@ -16,7 +18,8 @@ export default function MessageBubble({
     isMe,
     position = "single",
     time,
-    user
+    user,
+    isNew
 }: MessageBubbleProps) {
 
     const radiusMap: Record<MessagePosition, string> = {
@@ -26,8 +29,10 @@ export default function MessageBubble({
         last: isMe ? "rounded-tr-none" : "rounded-tl-none"
     }
 
+    const MotionBox = motion(Box);
+
     return (
-        <Box className={`${position === "middle" ? "mb-0" : "mb-1"} flex flex-col`}>
+        <Box className={`flex flex-col`}>
             <Box className={`flex items-end gap-2 ${isMe ? "justify-end" : "justify-start"}`}>
                 {/* Avatar hoặc khoảng trống */}
                 {!isMe ? (
@@ -41,25 +46,42 @@ export default function MessageBubble({
                 )}
 
                 {/* Bubble */}
-                <Box className={`max-w-[60%] px-3 py-2 rounded-mes
-                    ${isMe ? "bg-primary text-primary-foreground"
-                        : "bg-secondary text-secondary-foreground"}
-                    ${radiusMap[position]}
-                `}>
+                <MotionBox
+                    initial={
+                        isNew
+                            ? { scale: 0.85, opacity: 0 }
+                            : false
+                    }
+                    animate={isNew
+                        ? { scale: 1, opacity: 1 }
+                        : false}
+                    transition={{
+                        type: "spring",
+                        stiffness: 380,
+                        damping: 24
+                    }}
+                    className={`max-w-[60%] px-3 py-2 rounded-mes
+                        ${isMe ? "bg-primary text-primary-foreground"
+                            : "bg-secondary text-secondary-foreground"}
+                        ${radiusMap[position]}
+                    `}
+                >
                     {content}
-                </Box>
+                </MotionBox>
             </Box>
 
             {/* Timestamp */}
-            {(position === "single" || position === "last") && (
-                <Box
-                    className={`flex ${isMe ? "justify-end" : "justify-start"} mt-1`}
-                    style={{  }} // trùng max-width của bubble
-                >
-                    {!isMe ? (<Box style={{ width: 40 }} />): ""}
-                    <span className="ml-3 text-xs text-secondary-foreground">{time}</span>
-                </Box>
-            )}
-        </Box>
+            {
+                (position === "single" || position === "last") && (
+                    <Box
+                        className={`flex ${isMe ? "justify-end" : "justify-start"} mt-1`}
+                        style={{}} // trùng max-width của bubble
+                    >
+                        {!isMe ? (<Box style={{ width: 40 }} />) : ""}
+                        <span className="ml-3 text-xs text-secondary-foreground">{time}</span>
+                    </Box>
+                )
+            }
+        </Box >
     )
 }

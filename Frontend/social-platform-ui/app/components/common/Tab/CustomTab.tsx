@@ -6,7 +6,7 @@ const CustomTab = styled(Tab)(({ theme }) => ({
     padding: "6px 12px",
     fontSize: 14,
     fontWeight: 500,
-    color: theme.palette.text.secondary,
+    color: "hsl(var(--sub-foreground))",
     gap: 0,
 
     "& .MuiTab-iconWrapper": {
@@ -15,7 +15,7 @@ const CustomTab = styled(Tab)(({ theme }) => ({
     },
 
     "&.Mui-selected": {
-        color: theme.palette.text.primary,
+        color: "hsl(var(--sub-foreground))",
         fontWeight: 600,
     },
 }));

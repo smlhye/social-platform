@@ -5,9 +5,8 @@ import SidebarItem from "./SidebarItem";
 import { AvatarUI } from "../../common/Avatar";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import NestedMenu from "../../common/Menu/NestedMenu";
-import { NestedMenuItem, subMenuItems } from "../../common/Menu/submenuItems";
-import { MENU_ACTIONS } from "../../common/Menu";
+import { NestedMenuItem, subMenuItems } from "../../common/Menu/NestedMenu/submenuItems";
+import { MENU_ACTIONS, NestedMenu } from "../../common/Menu/NestedMenu";
 import { useI18n } from "@/app/lib/i18nContext";
 import { Locale } from "@/app/lib/i18n";
 import { AccountDialog } from "../../common/Dialog/AccountDialog";
@@ -87,7 +86,7 @@ export default function Sidebar() {
         <Box
             width="var(--sidebar-width)"
             height="100vh"
-            className="flex flex-col items-center py-4 gap-3"
+            className="flex flex-col items-center py-4 gap-3 bg-sidebar-bg"
         >
             {/* <Image
                 className="mb-3 cursor-pointer"

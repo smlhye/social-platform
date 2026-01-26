@@ -10,8 +10,7 @@ import { FormInput } from "@/app/components/chat/ChatInput";
 import InformationItem from "../components/InfomationItem";
 import { CustomSwitch } from "../../../ThemeSwitch";
 import { useState } from "react";
-import CustomTabs from "../../../Tab/CustomTabs";
-import { CustomTab } from "../../../Tab";
+import { CustomTab, CustomTabs } from "../../../Tab";
 import { CgProfile } from "react-icons/cg";
 
 interface AccountInfoProps {

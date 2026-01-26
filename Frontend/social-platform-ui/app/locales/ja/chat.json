@@ -7,5 +7,20 @@
     "vietnamese": "ベトナム語",
     "english": "英語",
     "japanese": "日本語",
-    "chinese": "中国語"
+    "chinese": "中国語",
+    "search": "検索",
+    "all": "すべて",
+    "notSeen": "未読",
+    "online": "オンライン",
+    "offline": "オフライン",
+    "hourago": "時間前",
+    "minuteago": "分前",
+    "dayago": "日前",
+    "active": "最終アクティブ",
+    "contactInfo": "連絡先情報",
+    "image": "画像",
+    "file": "ファイル",
+    "link": "リンク",
+    "viewAll": "すべて表示",
+    "placeholder": "メッセージを入力"
 }

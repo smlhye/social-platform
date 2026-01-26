@@ -7,7 +7,7 @@ const CustomTabs = styled(Tabs)(({ theme }) => ({
     "& .MuiTabs-indicator": {
         height: 2,
         borderRadius: 2,
-        backgroundColor: theme.palette.text.primary,
+        backgroundColor: "hsl(var(--sub-foreground))",
     },
 }));
 

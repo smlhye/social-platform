@@ -7,7 +7,7 @@
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
 
-    --sub-background: 200 33.33% 98.24%;
+    --sub-background: 260 20% 97.06%;
     --sub-foreground: 222.2 84% 4.9%;
 
     --card: 0 0% 100%;
@@ -43,6 +43,9 @@
 
     --sidebar-width: 75px;
     --sidebar-length: 45px;
+
+    --sidebar-bg: 214.29 13.73% 10%;
+    --sidebar-text: 226.67 4.39% 40.2%;
 
     --chat-warning: 348.92 97.01% 60.59%
   }
@@ -132,6 +135,9 @@
   --radius-mes: var(--radius-message);
 
   --color-chat-warning: hsl(var(--chat-warning));
+
+  --color-sidebar-bg: hsl(var(--sidebar-bg));
+  --color-sidebar-text: hsl(var(--sidebar-text));
 }
 
 /* @media (prefers-color-scheme: dark) {
@@ -148,7 +154,59 @@ body {
   /* @apply bg-background text-foreground font-sans; */
   @apply bg-background text-foreground;
   font-family: -apple-system, system-ui, sans-serif !important;
+
+  overflow: hidden;
 }
+
+/* scroll */
+/* LIGHT */
+/* :root::-webkit-scrollbar-track {
+  background: #f5f5f5;
+}
+:root::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+}
+.dark::-webkit-scrollbar-track {
+  background: #121212;
+}
+.dark::-webkit-scrollbar-thumb {
+  background: #444;
+} */
+
+/* Light mode */
+.scroll-overlay::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scroll-overlay::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scroll-overlay::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.25);
+  border-radius: 999px;
+}
+
+.scroll-overlay:hover::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+
+/* Dark mode */
+.dark ::-webkit-scrollbar-track {
+  background: #111827;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #374151;
+}
+
+.chat-scroll {
+  overflow-y: auto;
+  padding-right: 12px;          /* bù scrollbar */
+  margin-right: -12px;          /* kéo lại layout */
+}
+
 
 /* Reaction Floating */
 @keyframes floatUp {
@@ -181,4 +239,22 @@ body {
 
 .shadow-bottom {
   box-shadow: 0 6px 12px -6px rgba(0, 0, 0, 0.15);
+}
+
+/* ZALO STYLE OVERLAY SCROLLBAR */
+.scroll-overlay::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scroll-overlay::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scroll-overlay::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.25);
+  border-radius: 999px;
+}
+
+.scroll-overlay:hover::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.4);
 }

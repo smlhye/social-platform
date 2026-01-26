@@ -32,15 +32,15 @@ export default function FriendLabel({ avatar, name, lastMes, time, read, active,
             />
             <Stack direction="column" className="flex-1 min-w-0" spacing={1}>
                 <Box width="100%" display="flex" flexDirection="row" justifyContent="space-between" alignItems="center" gap={1.5}>
-                    <p className={`flex-1 min-w-0 truncate text-sm ${!read ? "font-semibold" : "font-normal"}`}>
+                    <p className={`flex-1 min-w-0 truncate text-sm font-bold`}>
                         {name}
                     </p>
-                    <p className={`shrink-0 whitespace-nowrap text-xs text-secondary-foreground ${!read ? "font-semibold" : "font-normal"}`}>
+                    <p className={`shrink-0 whitespace-nowrap text-xs text-secondary-foreground font-semibold`}>
                         {time}
                     </p>
                 </Box>
                 <Box width="100%" display="flex" flexDirection="row" justifyContent="space-between" alignItems="center" gap={1.5} paddingRight={1.5}>
-                    <p className={`truncate text-sm pr-2 ${!read ? "text-secondary-foreground" : "text-accent-foreground"}`}>
+                    <p className={`truncate text-sm pr-2 font-semibold ${!read ? "text-secondary-foreground" : "text-accent-foreground"}`}>
                         {lastMes}</p>
                     {!read && (
                         <Badge

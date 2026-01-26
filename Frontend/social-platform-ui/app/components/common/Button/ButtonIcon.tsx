@@ -1,5 +1,5 @@
 interface ButtonIconProps {
-    icon: React.ReactNode;
+    icon?: React.ReactNode;
     children: React.ReactNode;
     onClick?: () => void;
     className?: string;
@@ -20,7 +20,6 @@ export default function ButtonIcon({
             className={`
         inline-flex items-center gap-1
         px-3 py-1
-        rounded-xl
         text-sm font-semibold
         bg-primary text-primary-foreground
         cursor-pointer

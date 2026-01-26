@@ -13,10 +13,13 @@ import {
 } from "react-icons/bs";
 import { MdOutlineDraw } from "react-icons/md";
 import { useEffect, useRef, useState } from "react";
+import { useI18n } from "@/app/lib/i18nContext";
 
 export default function ChatInput() {
     const [value, setValue] = useState("");
     const inputRef = useRef<HTMLInputElement>(null);
+
+    const { t } = useI18n();
 
     // Auto focus khi mở chat
     useEffect(() => {
@@ -37,11 +40,7 @@ export default function ChatInput() {
     };
 
     return (
-        <Box
-            sx={{
-                bgcolor: "background.paper",
-            }}
-        >
+        <Box>
             {/* 🔹 TOOLBAR */}
             <Box display="flex" alignItems="center" gap={0.5} mb={0.5}>
                 <ToolbarIcon label="Emoji"><BsEmojiSmile /></ToolbarIcon>
@@ -60,7 +59,7 @@ export default function ChatInput() {
                     value={value}
                     onChange={(e) => setValue(e.target.value)}
                     onKeyDown={handleKeyDown}
-                    placeholder="Nhập @, tin nhắn tới Nguyen Nguyen"
+                    placeholder={t("chat.placeholder")}
                     multiline
                     maxRows={4}
                     sx={{
@@ -68,13 +67,13 @@ export default function ChatInput() {
                         fontSize: 15,
                         px: 1,
                         py: 0.5,
-                        color: "text.primary",
+                        color: "hsl(var(--foreground))",
                         "& textarea": {
                             resize: "none",
                             lineHeight: "25px",
                         },
                         "& textarea::placeholder": {
-                            color: "text.secondary",
+                            color: "hsl(var(--foreground))",
                             opacity: 1,
                         },
                     }}
@@ -114,7 +113,7 @@ function ToolbarIcon({
                 size="small"
                 onClick={onClick}
                 sx={{
-                    color: "text.secondary",
+                    color: "hsl(var(--foreground))",
                     "&:hover": {
                         bgcolor: "action.hover",
                         color: "text.primary",

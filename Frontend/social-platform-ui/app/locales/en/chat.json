@@ -7,5 +7,20 @@
     "vietnamese": "Vietnamese",
     "english": "English",
     "japanese": "Japanese",
-    "chinese": "Chinese"
+    "chinese": "Chinese",
+    "search": "Search",
+    "all": "All",
+    "notSeen": "Unread",
+    "online": "Online",
+    "offline": "Offline",
+    "hourago": "hours ago",
+    "minuteago": "minutes ago",
+    "dayago": "days ago",
+    "active": "Active",
+    "contactInfo": "Contact information",
+    "image": "Image",
+    "file": "File",
+    "link": "Link",
+    "viewAll": "View all",
+    "placeholder": "Type your message"
 }

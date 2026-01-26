@@ -7,5 +7,19 @@
     "vietnamese": "Tiếng Việt",
     "english": "Tiếng Anh",
     "japanese": "Tiếng Nhật",
-    "chinese": "Tiếng Trung"
+    "chinese": "Tiếng Trung",
+    "search": "Tìm kiếm",
+    "all": "Tất cả",
+    "notSeen": "Chưa đọc",
+    "online": "Đang hoạt động",
+    "offline": "Hoạt động",
+    "hourago": "giờ trước",
+    "minuteago": "phút trước",
+    "dayago": "ngày trước",
+    "contactInfo": "Thông tin liên hệ",
+    "image": "Ảnh/Image",
+    "file": "File",
+    "link": "Link",
+    "viewAll": "Xem tất cả",
+    "placeholder": "Nhập tin nhắn của bạn"
 }
