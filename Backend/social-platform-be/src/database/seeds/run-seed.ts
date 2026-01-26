@@ -1,4 +1,4 @@
-import { AppDataSource } from "../data-source-cli";
+import { AppDataSource } from "../data-source.cli";
 import { SeedService } from "./seed.service";
 
 async function main() {

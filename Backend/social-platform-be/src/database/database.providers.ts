@@ -7,6 +7,9 @@ export const databaseProviders: Provider[] = [
     {
         provide: DataSource,
         inject: [DATABASE_CONFIG],
-        useFactory: (dbConfig: DatabaseConfig) => createDataSource(dbConfig)
+        useFactory: (dbConfig: DatabaseConfig) => {
+            const dataSource = createDataSource(dbConfig);
+            return dataSource.initialize();
+        }
     }
 ]

@@ -1,9 +1,11 @@
 import { Module } from '@nestjs/common';
 import { databaseProviders } from './database.providers';
-import { DATABASE_CONFIG } from 'src/config';
+import { ConfigModule, DATABASE_CONFIG } from 'src/config';
+import { DataSource } from 'typeorm';
 
 @Module({
+    imports: [ConfigModule],
     providers: [...databaseProviders],
-    exports: [DATABASE_CONFIG],
+    exports: [DataSource],
 })
 export class DatabaseModule { }
