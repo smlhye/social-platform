@@ -9,6 +9,12 @@ async function bootstrap() {
   app.setGlobalPrefix(`${APP.PREFIX}/${APP.VERSION}`)
 
   app.useGlobalInterceptors(new TransformInterceptor());
+  
+  app.enableCors({
+    origin: 'http://localhost:3000',
+    credentials: true,
+  });
+
 
 
   await app.listen(process.env.APP_PORT ?? 3000);

@@ -7,17 +7,29 @@ import { useForm } from "react-hook-form";
 import { signinSchema, SignInSchema } from "@/app/schemas/auth.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { TextInput } from "../common/Input";
+import { useSignIn } from "@/app/hooks/useAuth";
 
 export default function SignInForm() {
     const { t } = useI18n();
     const [show, setShow] = useState<boolean>(false);
+    const { mutate, isPending, error } = useSignIn();
 
     const { register, handleSubmit, formState: { errors, isSubmitting }, } = useForm<SignInSchema>({
-        resolver: zodResolver(signinSchema)
+        resolver: zodResolver(signinSchema),
+        defaultValues: {
+            rememberMe: true
+        }
     });
 
     const onSubmit = (data: SignInSchema) => {
-        console.log("LOGIN DATA: ", data)
+        mutate(data, {
+            onSuccess: (res) => {
+                alert(res.resMessage);
+            },
+            onError: (res) => {
+                console.log(res.message);
+            }
+        })
     }
 
     return (

@@ -58,7 +58,7 @@ export class UserService {
         return this.repo.save(newUser);
     }
 
-    async findActiveByUsername(username: string) {
+    async findActiveUserForAuth(username: string) {
         return this.repo.findOne({
             where: {
                 username,

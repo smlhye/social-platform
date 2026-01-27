@@ -1,6 +1,6 @@
 import { IsBoolean, IsOptional, IsString } from "class-validator";
 
-export class SignInDTO {
+export default class SignInDTO {
     @IsString()
     username: string;
 

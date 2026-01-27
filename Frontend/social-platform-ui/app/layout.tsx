@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "@/app/components/layout/Header";
 import { I18nProvider } from "./lib/i18nContext";
+import { ReactQueryProvider } from "./providers/provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,9 +35,11 @@ export default function RootLayout({ children }: RootLayoutProps) {
         bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100
         flex flex-col`}
       >
-        <I18nProvider>
-          <main className="flex-1 overflow-hidden min-h-0">{children}</main>
-        </I18nProvider> 
+        <ReactQueryProvider>
+          <I18nProvider>
+            <main className="flex-1 overflow-hidden min-h-0">{children}</main>
+          </I18nProvider>
+        </ReactQueryProvider>
       </body>
     </html>
   );
