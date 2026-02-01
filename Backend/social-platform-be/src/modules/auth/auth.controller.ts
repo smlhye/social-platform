@@ -4,6 +4,7 @@ import type { Request, Response } from "express";
 import SignInDTO from "./dto/SignInDTO";
 import { JwtAuthGuard } from "./guard/jwt-auth.guard";
 import type { AuthRequest } from "./types/auth-request.type";
+import { ok } from "src/common/base/response.helper";
 
 @Controller("auth")
 export class AuthController {
@@ -33,13 +34,14 @@ export class AuthController {
             });
         }
 
-        return result;
+        return ok(result, "Logged in successful!");
     }
 
     @UseGuards(JwtAuthGuard)
     @Get("me")
     async getMe(@Req() req: AuthRequest) {
-        return this.authService.getCurrentUser(req.user);
+        const user = await this.authService.getCurrentUser(req.user);
+        return ok(user, "Get user information successful!");
     }
 
     @UseGuards(JwtAuthGuard)
@@ -58,6 +60,6 @@ export class AuthController {
             path: '/',
         });
 
-        return { message: 'Logged out successfully' };
+        return ok(null, "Logged out successful!");
     }
 }
