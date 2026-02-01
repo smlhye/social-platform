@@ -39,4 +39,19 @@ export class AuthService {
             }
         }
     }
+
+    async getCurrentUser(payload: { userId: string, username: string }) {
+        const user = await this.userService.findActiveUserById(payload.userId);
+        if (!user) {
+            throw new UnauthorizedException("User not found!");
+        }
+        return {
+            id: user.id,
+            username: user.username,
+            fullName: user.firstName + " " + user.lastName,
+            dob: user.dob,
+            email: user.email,
+            phoneNumber: user.phoneNumber
+        }
+    }
 }

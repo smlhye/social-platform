@@ -58,6 +58,15 @@ export class UserService {
         return this.repo.save(newUser);
     }
 
+    async findActiveUserById(id: string) {
+        return this.repo.findOne({
+            where: {
+                id,
+                isDeleted: false
+            },
+        })
+    }
+
     async findActiveUserForAuth(username: string) {
         return this.repo.findOne({
             where: {

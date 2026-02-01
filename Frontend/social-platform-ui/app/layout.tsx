@@ -4,6 +4,7 @@ import "./globals.css";
 import Header from "@/app/components/layout/Header";
 import { I18nProvider } from "./lib/i18nContext";
 import { ReactQueryProvider } from "./providers/provider";
+import { ToastProvider } from "./components/common/Toast/ToastContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,7 +38,9 @@ export default function RootLayout({ children }: RootLayoutProps) {
       >
         <ReactQueryProvider>
           <I18nProvider>
-            <main className="flex-1 overflow-hidden min-h-0">{children}</main>
+            <ToastProvider>
+              <main className="flex-1 overflow-hidden min-h-0">{children}</main>
+            </ToastProvider>
           </I18nProvider>
         </ReactQueryProvider>
       </body>

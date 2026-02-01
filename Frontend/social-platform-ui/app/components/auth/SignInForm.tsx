@@ -8,11 +8,16 @@ import { signinSchema, SignInSchema } from "@/app/schemas/auth.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { TextInput } from "../common/Input";
 import { useSignIn } from "@/app/hooks/useAuth";
+import { useRouter } from "next/navigation";
+import { useToast } from "../common/Toast/ToastContext";
 
 export default function SignInForm() {
+    const router = useRouter();
     const { t } = useI18n();
     const [show, setShow] = useState<boolean>(false);
     const { mutate, isPending, error } = useSignIn();
+
+    const toast = useToast();
 
     const { register, handleSubmit, formState: { errors, isSubmitting }, } = useForm<SignInSchema>({
         resolver: zodResolver(signinSchema),
@@ -24,10 +29,12 @@ export default function SignInForm() {
     const onSubmit = (data: SignInSchema) => {
         mutate(data, {
             onSuccess: (res) => {
-                alert(res.resMessage);
+                console.log(res.resMessage);
+                toast.success(res.resMessage)
+                router.push("/");
             },
             onError: (res) => {
-                console.log(res.message);
+                toast.error(res.message);
             }
         })
     }

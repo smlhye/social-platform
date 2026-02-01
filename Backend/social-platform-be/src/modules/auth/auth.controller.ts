@@ -1,7 +1,9 @@
-import { Body, Controller, Post, Res } from "@nestjs/common";
+import { Body, Controller, Get, Post, Req, Res, UseGuards } from "@nestjs/common";
 import { AuthService } from "./auth.service";
-import type { Response } from "express";
+import type { Request, Response } from "express";
 import SignInDTO from "./dto/SignInDTO";
+import { JwtAuthGuard } from "./guard/jwt-auth.guard";
+import type { AuthRequest } from "./types/auth-request.type";
 
 @Controller("auth")
 export class AuthController {
@@ -32,5 +34,30 @@ export class AuthController {
         }
 
         return result;
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Get("me")
+    async getMe(@Req() req: AuthRequest) {
+        return this.authService.getCurrentUser(req.user);
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Post("sign-out")
+    async signOut(@Res({ passthrough: true }) res: Response) {
+        res.clearCookie('ACCESS_TOKEN', {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'lax',
+            path: '/'
+        })
+        res.clearCookie('REFRESH_TOKEN', {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'lax',
+            path: '/',
+        });
+
+        return { message: 'Logged out successfully' };
     }
 }

@@ -4,7 +4,7 @@ import { DatabaseModule } from "./database";
 import { HealthModule } from "./modules/health/health.module";
 import { UserModule } from "./modules/user/user.module";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { AuthModule } from "./modules/auth/user.module";
+import { AuthModule } from "./modules/auth/auth.module";
 
 @Module({
     imports: [

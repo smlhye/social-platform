@@ -1,17 +1,21 @@
-import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from "@nestjs/common";
-import { map } from "rxjs";
+import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common';
+import { Observable, map } from 'rxjs';
+import { ApiResponse } from '../interfaces/api-response.interface';
+import { WrappedResponse } from '../interfaces/wrapped-response.interface';
 
 @Injectable()
-export class TransformInterceptor<T> implements NestInterceptor<T, any> {
-    intercept(context: ExecutionContext, next: CallHandler) {
-        const res = context.switchToHttp().getResponse();
-
+export class TransformInterceptor<T>
+    implements NestInterceptor<ApiResponse<T>, WrappedResponse<T>> {
+    intercept(
+        context: ExecutionContext,
+        next: CallHandler<ApiResponse<T>>,
+    ): Observable<WrappedResponse<T>> {
         return next.handle().pipe(
-            map((data) => ({
-                resStatus: res.statusCode,
+            map((response) => ({
+                resData: response.data ?? null,
+                resMessage: response.message ?? 'Success',
                 resSuccess: true,
-                resMessage: 'Success',
-                resData: data,
+                resError: null,
             })),
         );
     }
