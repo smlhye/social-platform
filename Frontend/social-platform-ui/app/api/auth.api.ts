@@ -11,4 +11,11 @@ export const AuthAPI = {
             data: payload
         }
     ),
+
+    signOut: () => apiGateway<ApiResponse<null>>(
+        END_POINTS.auth.signOut,
+        {
+            method: "POST"
+        }
+    ),
 }

@@ -1,12 +1,20 @@
-"use client";
-
+import { cookies } from "next/headers";
 import { Sidebar } from "../components/layout/Sidebar";
+import { redirect } from "next/navigation";
 
-export default function ChatLayout({
+export default async function ChatLayout({
     children,
 }: {
     children: React.ReactNode;
 }) {
+
+    const cookieStore = await cookies();
+    const accessToken = cookieStore.get("ACCESS_TOKEN");
+
+    if (!accessToken) {
+        redirect("/sign-in");
+    }
+
     return (
         <div className="flex h-full overflow-hidden">
             <Sidebar />

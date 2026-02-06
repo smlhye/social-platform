@@ -24,17 +24,17 @@ export class AuthController {
             path: '/',
         });
 
-        if (signInDTO.rememberMe && refreshToken) {
-            res.cookie('REFRESH_TOKEN', refreshToken, {
-                httpOnly: true,
-                secure: process.env.NODE_ENV === 'production',
-                sameSite: 'lax',
-                maxAge: 7 * 24 * 60 * 60 * 1000,
-                path: '/',
-            });
-        }
+        res.cookie('REFRESH_TOKEN', refreshToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'lax',
+            maxAge: signInDTO.rememberMe
+                ? 7 * 24 * 60 * 60 * 1000
+                : 24 * 60 * 60 * 1000,
+            path: '/',
+        });
 
-        return ok(result, "Logged in successful!");
+        return ok({ accessToken }, "Logged in successful!");
     }
 
     @UseGuards(JwtAuthGuard)
@@ -44,7 +44,6 @@ export class AuthController {
         return ok(user, "Get user information successful!");
     }
 
-    @UseGuards(JwtAuthGuard)
     @Post("sign-out")
     async signOut(@Res({ passthrough: true }) res: Response) {
         res.clearCookie('ACCESS_TOKEN', {

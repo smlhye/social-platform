@@ -8,3 +8,9 @@ export const useSignIn = () => {
         mutationFn: AuthAPI.signIn,
     });
 };
+
+export const useSignOut = () => {
+    return useMutation<ApiResponse<null>, Error>({
+        mutationFn: AuthAPI.signOut,
+    });
+};

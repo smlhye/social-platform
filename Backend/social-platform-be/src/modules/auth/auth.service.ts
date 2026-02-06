@@ -27,10 +27,10 @@ export class AuthService {
             expiresIn: process.env.JWT_ACCESS_EXPIRES_IN as JwtSignOptions["expiresIn"],
         });
 
-        const refreshToken = signInDTO.rememberMe ? await this.jwtService.signAsync(payload, {
+        const refreshToken = await this.jwtService.signAsync(payload, {
             secret: process.env.JWT_REFRESH_SECRET!,
-            expiresIn: process.env.JWT_REFRESH_EXPIRES_IN as JwtSignOptions["expiresIn"],
-        }) : null;
+            expiresIn: signInDTO.rememberMe ? process.env.JWT_REFRESH_EXPIRES_IN as JwtSignOptions["expiresIn"]: '1d',
+        });
 
         return {
             tokens: {

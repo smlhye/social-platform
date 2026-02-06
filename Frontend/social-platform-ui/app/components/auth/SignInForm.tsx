@@ -10,6 +10,7 @@ import { TextInput } from "../common/Input";
 import { useSignIn } from "@/app/hooks/useAuth";
 import { useRouter } from "next/navigation";
 import { useToast } from "../common/Toast/ToastContext";
+import { FullScreenLoading } from "../common/Loading";
 
 export default function SignInForm() {
     const router = useRouter();
@@ -41,6 +42,7 @@ export default function SignInForm() {
 
     return (
         <>
+            {isPending && <FullScreenLoading />}
             <h1 className="text-5xl text-secondary-foreground font-bold mb-0">{t('auth.signinTitle')}</h1>
             <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">{t('auth.welcomeMessage')}</p>
 

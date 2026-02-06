@@ -12,6 +12,9 @@ import { Locale } from "@/app/lib/i18n";
 import { AccountDialog } from "../../common/Dialog/AccountDialog";
 import { SettingsDialog } from "../../common/Dialog/SettingsDialog";
 import { usePathname, useRouter } from "next/navigation";
+import { useSignOut } from "@/app/hooks/useAuth";
+import { AxiosError } from "axios";
+import { FullScreenLoading } from "../../common/Loading";
 
 export default function Sidebar() {
 
@@ -31,6 +34,7 @@ export default function Sidebar() {
     }, [pathname]);
 
     const { setLocale } = useI18n();
+    const { mutate, isPending } = useSignOut();
 
     const [accForm, setAccForm] = useState(false);
     const [settings, setSettings] = useState(false);
@@ -76,6 +80,17 @@ export default function Sidebar() {
             case MENU_ACTIONS.CHANGE_LANG:
                 setLocale(item.payload as Locale);
                 break;
+
+            case MENU_ACTIONS.LOG_OUT:
+                mutate(undefined, {
+                    onSuccess: (res) => {
+                        router.push("/sign-in");
+                    },
+                    onError: (err) => {
+                        console.log("Nothing");
+                    }
+                })
+                break;
         }
         setMenuStack([]);
         setActiveIdAction(null);
@@ -83,60 +98,63 @@ export default function Sidebar() {
 
 
     return (
-        <Box
-            width="var(--sidebar-width)"
-            height="100vh"
-            className="flex flex-col items-center py-4 gap-3 bg-sidebar-bg"
-        >
-            {/* <Image
+        <>
+            {isPending && <FullScreenLoading />}
+            <Box
+                width="var(--sidebar-width)"
+                height="100vh"
+                className="flex flex-col items-center py-4 gap-3 bg-sidebar-bg"
+            >
+                {/* <Image
                 className="mb-3 cursor-pointer"
                 src="/freepngimng.png"
                 alt="Avatar"
                 width={40}
                 height={40} /> */}
-            <AvatarUI
-                name="Hồ Đông Huy"
-            />
-            <Box className="mt-2 flex flex-col">
-                {sidebarItems.map((item) => (
-                    <SidebarItem
-                        key={item.id}
-                        icon={item.icon}
-                        active={(item.type === "nav" && activeId === item.id) ||  // nav active
-                            (item.type === "action" && activeIdAction === item.id)}
-                        label={item.label}
-                        onClick={(e) => handleClickItem(item, e)}
-                        isDivider={item.isDivider}
+                <AvatarUI
+                    name="Hồ Đông Huy"
+                />
+                <Box className="mt-2 flex flex-col">
+                    {sidebarItems.map((item) => (
+                        <SidebarItem
+                            key={item.id}
+                            icon={item.icon}
+                            active={(item.type === "nav" && activeId === item.id) ||  // nav active
+                                (item.type === "action" && activeIdAction === item.id)}
+                            label={item.label}
+                            onClick={(e) => handleClickItem(item, e)}
+                            isDivider={item.isDivider}
+                        />
+                    ))}
+                </Box>
+                {menuStack.map((menu, index) => (
+                    <NestedMenu
+                        key={index}
+                        anchorEl={menu.anchorEl}
+                        open
+                        items={menu.items}
+                        onClose={() => {
+                            setMenuStack([]);
+                            setActiveIdAction(null);
+                        }}
+                        onItemClick={handleMenuAction}
+                        onOpenSubMenu={(items, anchor) => {
+                            setMenuStack((prev) => {
+                                if (!items || !anchor) {
+                                    return prev.slice(0, index + 1);
+                                }
+                                return [
+                                    ...prev.slice(0, index + 1),
+                                    { items, anchorEl: anchor },
+                                ];
+                            });
+                        }}
                     />
                 ))}
-            </Box>
-            {menuStack.map((menu, index) => (
-                <NestedMenu
-                    key={index}
-                    anchorEl={menu.anchorEl}
-                    open
-                    items={menu.items}
-                    onClose={() => {
-                        setMenuStack([]);
-                        setActiveIdAction(null);
-                    }}
-                    onItemClick={handleMenuAction}
-                    onOpenSubMenu={(items, anchor) => {
-                        setMenuStack((prev) => {
-                            if (!items || !anchor) {
-                                return prev.slice(0, index + 1);
-                            }
-                            return [
-                                ...prev.slice(0, index + 1),
-                                { items, anchorEl: anchor },
-                            ];
-                        });
-                    }}
-                />
-            ))}
 
-            <AccountDialog open={accForm} onClose={() => setAccForm(false)} />
-            <SettingsDialog open={settings} onClose={() => { setSettings(false) }} />
-        </Box>
+                <AccountDialog open={accForm} onClose={() => setAccForm(false)} />
+                <SettingsDialog open={settings} onClose={() => { setSettings(false) }} />
+            </Box>
+        </>
     )
 }

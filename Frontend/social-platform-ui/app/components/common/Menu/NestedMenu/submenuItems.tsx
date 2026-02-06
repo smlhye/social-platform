@@ -65,5 +65,6 @@ export const subMenuItems: NestedMenuItem[] = [
     {
         id: "logout",
         labelKey: "logout",
+        action: MENU_ACTIONS.LOG_OUT
     }
 ]
