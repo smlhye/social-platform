@@ -15,9 +15,14 @@ import { MdOutlineDraw } from "react-icons/md";
 import { useEffect, useRef, useState } from "react";
 import { useI18n } from "@/app/lib/i18nContext";
 
-export default function ChatInput() {
+interface ChatInputProps {
+    receiverId: string,
+    onSend?: (message: string) => void;
+}
+
+export default function ChatInput({ receiverId, onSend }: ChatInputProps) {
     const [value, setValue] = useState("");
-    const inputRef = useRef<HTMLInputElement>(null);
+    const inputRef = useRef<HTMLTextAreaElement>(null);
 
     const { t } = useI18n();
 
@@ -28,7 +33,11 @@ export default function ChatInput() {
 
     const handleSend = () => {
         if (!value.trim()) return;
+
         console.log("Send:", value);
+
+        onSend?.(value);   // 👈 QUAN TRỌNG
+
         setValue("");
     };
 

@@ -15,3 +15,13 @@ export const signinSchema = z.object({
     rememberMe: z.boolean().optional(),
 })
 export type SignInSchema = z.infer<typeof signinSchema>;
+
+export const GetMeSchema = z.object({
+    id: z.string().uuid(),
+    username: z.string(),
+    fullName: z.string(),
+    dob: z.string().nullable(),
+    email: z.string().email().nullable(),
+    phoneNumber: z.string().nullable()
+})
+export type GetMeResponse = z.infer<typeof GetMeSchema>;

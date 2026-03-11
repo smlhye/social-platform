@@ -2,8 +2,8 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { APP } from './common/constants/app.constants';
 import { TransformInterceptor } from './common/interceptors/transform.interceptor';
-import cookieParser from 'cookie-parser';
 import { HttpExceptionFilter } from './common/filter/http-exception.filter';
+import cookieParser from 'cookie-parser';
 
 
 async function bootstrap() {
