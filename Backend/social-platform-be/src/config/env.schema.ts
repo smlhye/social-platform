@@ -45,6 +45,11 @@ export const EnvSchema = z.object({
     COOKIE_DOMAIN: z.string().nonempty().describe("Cookie domain"),
     COOKIE_SECURE: z.preprocess(parseBoolean, z.boolean()).default(false).describe("Cookie secure flag"),
     COOKIE_SAME_SITE: z.enum(['lax', 'strict', 'none']).default('lax').describe("SameSite cookie policy"),
+
+    // Cloud
+    CLOUD_NAME: z.string().nonempty().describe("Cloud name"),
+    API_KEY: z.string().nonempty().describe("Api Key"),
+    API_SECRET: z.string().nonempty().describe("Api Key"),
 });
 
 export type Env = z.infer<typeof EnvSchema>;

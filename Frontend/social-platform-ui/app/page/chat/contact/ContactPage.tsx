@@ -1,5 +1,10 @@
+"use client";
+
+import { useParams } from "next/navigation";
+import { UserDetail } from "@/app/components/chat/SuggestionList/UserDetail";
+
 export default function ContactPage() {
-    return (
-        <h1>Hello, This is Contact Page</h1>
-    )
+    const { id } = useParams<{ id: string }>();
+
+    return <UserDetail userId={id} />;
 }

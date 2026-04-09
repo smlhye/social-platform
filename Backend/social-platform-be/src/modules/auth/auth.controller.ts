@@ -61,4 +61,33 @@ export class AuthController {
 
         return ok(null, "Logged out successful!");
     }
+
+    @Post("refresh")
+    async refresh(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
+        const refreshToken = req.cookies["REFRESH_TOKEN"];
+
+        const { accessToken } = await this.authService.refreshToken(refreshToken);
+
+        res.cookie("ACCESS_TOKEN", accessToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "lax",
+            maxAge: 5 * 60 * 1000,
+            path: "/",
+        });
+
+        return ok({ accessToken }, "Token refreshed!");
+    }
+
+    @Post("forgot-password")
+    async forgotPassword(@Body('email') email: string) {
+        await this.authService.forgotPassword(email);
+        return ok(null, "OTP send!");
+    }
+
+    @Post("reset-password")
+    async resetPassword(@Body() body: { email: string, otp: string, newPassword: string }) {
+        await this.authService.resetPassword(body.email, body.otp, body.newPassword);
+        return ok(null, "Password updated!");
+    }
 }

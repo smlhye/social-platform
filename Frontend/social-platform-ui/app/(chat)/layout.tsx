@@ -1,26 +1,28 @@
-import { cookies } from "next/headers";
+"use client"
 import { Sidebar } from "../components/layout/Sidebar";
-import { redirect } from "next/navigation";
+import { useCurrentUser } from "../hooks/useAuth";
+import { WebSocketProvider } from "../context/websocket.context";
+import { useNotificationSocket } from "../hooks/useNotificationSocket";
 
-export default async function ChatLayout({
+export default function ChatLayout({
     children,
 }: {
     children: React.ReactNode;
 }) {
 
-    const cookieStore = await cookies();
-    const accessToken = cookieStore.get("ACCESS_TOKEN");
+    const { data: me } = useCurrentUser();
+    const userId = me?.resData.id ?? "";
 
-    if (!accessToken) {
-        redirect("/sign-in");
-    }
+    useNotificationSocket(userId);
 
     return (
-        <div className="flex h-full overflow-hidden">
-            <Sidebar />
-            <div className="flex-1 overflow-hidden">
-                {children}
+        <WebSocketProvider userId={userId}>
+            <div className="flex h-full overflow-hidden">
+                <Sidebar />
+                <div className="flex-1 overflow-hidden">
+                    {children}
+                </div>
             </div>
-        </div>
+        </WebSocketProvider>
     );
 }

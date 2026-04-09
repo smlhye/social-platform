@@ -5,6 +5,8 @@ import Header from "@/app/components/layout/Header";
 import { I18nProvider } from "./lib/i18nContext";
 import { ReactQueryProvider } from "./providers/provider";
 import { ToastProvider } from "./components/common/Toast/ToastContext";
+import { cookies } from "next/headers";
+import { defaultLocale, getTranslation, Locale } from "./lib/i18n";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,8 +27,11 @@ interface RootLayoutProps {
   children: React.ReactNode
 }
 
-export default function RootLayout({ children }: RootLayoutProps) {
+export default async function RootLayout({ children }: RootLayoutProps) {
   const isSignedIn = true;
+  const cookieStore = await cookies()
+  const locale = (cookieStore.get('locale')?.value as Locale) || defaultLocale;
+  const messages = getTranslation(locale);
   return (
     <html lang="en">
       <body
@@ -37,7 +42,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
         flex flex-col`}
       >
         <ReactQueryProvider>
-          <I18nProvider>
+          <I18nProvider initialLocale={locale} initialMessages={messages}>
             <ToastProvider>
               <main className="flex-1 overflow-hidden min-h-0">{children}</main>
             </ToastProvider>

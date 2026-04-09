@@ -1,5 +1,5 @@
 import { isDateString, IsDateString, IsEmail, IsEnum, IsOptional, IsString, Length, MinLength } from "class-validator";
-import { Gender } from "src/database";
+import { Gender } from "src/database/entities/user.entity";
 
 export default class CreateUserDTO {
     @IsString({ message: "First name is string" })
@@ -10,6 +10,7 @@ export default class CreateUserDTO {
     @Length(2, 50, { message: "Last name must be in 2 to 50 characters" })
     lastName: string;
 
+    @IsOptional()
     @IsDateString()
     dob: string;
 

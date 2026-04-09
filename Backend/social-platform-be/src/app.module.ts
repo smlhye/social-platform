@@ -6,6 +6,7 @@ import { UserModule } from "./modules/user/user.module";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { AuthModule } from "./modules/auth/auth.module";
 import { MessageModule } from "./modules/message/message.module";
+import { FriendshipModule } from "./modules/friendship/friendship.module";
 
 @Module({
     imports: [
@@ -27,6 +28,7 @@ import { MessageModule } from "./modules/message/message.module";
         HealthModule,
         UserModule,
         AuthModule,
-        MessageModule
+        MessageModule,
+        FriendshipModule
     ]
 }) export class AppModule { }

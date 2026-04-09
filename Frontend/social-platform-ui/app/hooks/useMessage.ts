@@ -1,13 +1,34 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
 import { MessageAPI } from "../api/message.api";
 import { ApiResponse } from "../schemas/common.schema";
-import { MessageListResponse, MessageResponse, SendMessagePayload } from "../schemas/message.schema";
+import { MessageListResponse, MessageResponse, RecentChatListResponse, SendMessagePayload } from "../schemas/message.schema";
 
-export const useConversation = (userA?: string, userB?: string) => {
+export const useConversation = (userA?: string, userB?: string, offset: number = 0) => {
     return useQuery<ApiResponse<MessageListResponse>>({
+        queryKey: ["conversation", userA, userB, offset],
+        queryFn: () => MessageAPI.getConversation(userA!, userB!, offset),
+        enabled: !!userA && !!userB,
+    });
+};
+
+export const useConversationInfinite = (userA?: string, userB?: string) => {
+    return useInfiniteQuery<ApiResponse<MessageListResponse>, Error>({
         queryKey: ["conversation", userA, userB],
-        queryFn: () => MessageAPI.getConversation(userA!, userB!),
-        enabled: !!userA && !!userB
+        queryFn: ({ pageParam }) =>
+            MessageAPI.getConversation(userA!, userB!, pageParam as number),
+        enabled: !!userA && !!userB,
+        getNextPageParam: (lastPage, pages) => {
+            // lastPage: ApiResponse<MessageListResponse>
+            const messages = lastPage.resData ?? [];
+            return messages.length < 15 ? undefined : pages.length * 15;
+        },
+        initialPageParam: 0,
+    });
+};
+
+export const useMarkAsRead = () => {
+    return useMutation<ApiResponse<null>, Error, string>({
+        mutationFn: (friendId: string) => MessageAPI.markedRead(friendId)
     });
 };
 
@@ -16,3 +37,10 @@ export const useSendMessage = () => {
         mutationFn: MessageAPI.sendMessage
     });
 };
+
+export const useRecentMesList = () => {
+    return useQuery<ApiResponse<RecentChatListResponse>>({
+        queryKey: ["recentChat"],
+        queryFn: MessageAPI.getRecentChats
+    })
+}

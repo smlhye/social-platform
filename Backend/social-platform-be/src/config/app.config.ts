@@ -1,7 +1,7 @@
 import { ConfigService } from "@nestjs/config";
 import { Env } from "./env.schema";
-import { AppConfig, CookieConfig, DatabaseConfig, JwtConfig } from "./config.types";
-import { APP_CONFIG, COOKIE_CONFIG, DATABASE_CONFIG, JWT_CONFIG } from "./config.tokens";
+import { AppConfig, CloudConfig, CookieConfig, DatabaseConfig, JwtConfig } from "./config.types";
+import { APP_CONFIG, CLOUD_CONFIG, COOKIE_CONFIG, DATABASE_CONFIG, JWT_CONFIG } from "./config.tokens";
 
 type ConfigFactory<T> = (config: ConfigService<Env>) => T;
 
@@ -31,9 +31,16 @@ export const getCookieConfig: ConfigFactory<CookieConfig> = (config) => ({
     sameSite: config.getOrThrow<Env['COOKIE_SAME_SITE']>('COOKIE_SAME_SITE'),
 });
 
+export const getCloudConfig: ConfigFactory<CloudConfig> = (config) => ({
+    cloudName: config.getOrThrow<Env['CLOUD_NAME']>('CLOUD_NAME'),
+    apiKey: config.getOrThrow<Env['API_KEY']>('API_KEY'),
+    apiSecret: config.getOrThrow<Env['API_SECRET']>('API_SECRET'),
+});
+
 export const configGetters = [
     { token: APP_CONFIG, factory: getAppConfig },
     { token: DATABASE_CONFIG, factory: getDatabaseConfig },
     { token: JWT_CONFIG, factory: getJwtConfig },
     { token: COOKIE_CONFIG, factory: getCookieConfig },
+    { token: CLOUD_CONFIG, factory: getCloudConfig },
 ] as const;

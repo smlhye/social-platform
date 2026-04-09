@@ -16,4 +16,7 @@ export class Message {
 
     @CreateDateColumn({ name: 'created_at' })
     createdAt: Date;
+
+    @Column({ default: false })
+    isRead: boolean
 }

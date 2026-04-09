@@ -11,13 +11,16 @@ export class User {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
+    @Column({ nullable: true })
+    avatarURL: string
+
     @Column({ name: 'first_name', length: 50 })
     firstName: string;
 
     @Column({ name: 'last_name', length: 50 })
     lastName: string;
 
-    @Column({ type: 'date' })
+    @Column({ type: 'date', nullable: true })
     dob: Date;
 
     @Column({ type: 'enum', enum: Gender, nullable: true })
@@ -44,6 +47,6 @@ export class User {
     @UpdateDateColumn({ name: 'updated_at' })
     updatedAt: Date;
 
-    @DeleteDateColumn({name: 'deleted_at'})
+    @DeleteDateColumn({ name: 'deleted_at' })
     deletedAt: Date;
 }

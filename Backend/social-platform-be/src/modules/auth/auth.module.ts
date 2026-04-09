@@ -5,16 +5,21 @@ import { AuthService } from "./auth.service";
 import { AuthController } from "./auth.controller";
 import { PassportModule } from "@nestjs/passport";
 import { JwtStrategy } from "./strategy/jwt.strategy";
+import { MailService } from "./mail/mail.service";
+import { RedisService } from "./redis.service";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { User } from "src/database/entities/user.entity";
 
 @Module({
     imports: [
+        TypeOrmModule.forFeature([User]),
         UserModule,
-        JwtModule.register({ }),
+        JwtModule.register({}),
         PassportModule.register({
             defaultStrategy: "jwt"
         })
     ],
-    providers: [AuthService, JwtStrategy],
+    providers: [AuthService, JwtStrategy, MailService, RedisService],
     controllers: [AuthController],
     exports: [PassportModule]
 })

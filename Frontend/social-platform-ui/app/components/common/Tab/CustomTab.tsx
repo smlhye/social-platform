@@ -1,3 +1,4 @@
+"use client"
 import { styled, Tab } from "@mui/material";
 
 const CustomTab = styled(Tab)(({ theme }) => ({

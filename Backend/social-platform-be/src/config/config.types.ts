@@ -23,3 +23,9 @@ export interface CookieConfig {
     secure: boolean;
     sameSite: 'lax' | 'strict' | 'none';
 }
+
+export interface CloudConfig {
+    cloudName: string;
+    apiKey: string;
+    apiSecret: string;
+}

@@ -39,11 +39,11 @@ export const sidebarItems: SidebarItemType[] = [
         label: "Contacts"
     },
     {
-        id: "chart",
+        id: "profile",
         icon: <BiBarChartAlt2 />,
         type: "nav",
-        href: "/chart",
-        label: "Chart",
+        href: "/profile",
+        label: "Profile",
         // isDivider: true
     },
     {

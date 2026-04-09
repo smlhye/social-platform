@@ -11,6 +11,7 @@ import { useSignIn } from "@/app/hooks/useAuth";
 import { useRouter } from "next/navigation";
 import { useToast } from "../common/Toast/ToastContext";
 import { FullScreenLoading } from "../common/Loading";
+import Link from "next/link";
 
 export default function SignInForm() {
     const router = useRouter();
@@ -31,7 +32,8 @@ export default function SignInForm() {
         mutate(data, {
             onSuccess: (res) => {
                 console.log(res.resMessage);
-                toast.success(res.resMessage)
+                toast.success(res.resMessage);
+                router.prefetch("/");
                 router.push("/");
             },
             onError: (res) => {
@@ -68,17 +70,17 @@ export default function SignInForm() {
 
             {/* Dòng quên mật khẩu */}
             <p className="text-center text-sm text-gray-600 dark:text-gray-400 mt-2">
-                <a href="/forgot-password" className="text-secondary-foreground hover:underline font-bold">
+                <Link href="/forgot-password" className="text-secondary-foreground hover:underline font-bold">
                     {t('auth.forgotPassword')}
-                </a>
+                </Link>
             </p>
 
             {/* Dòng tạo tài khoản */}
             <p className="text-center text-sm text-gray-600 dark:text-gray-400 mt-2">
                 {t('auth.noAccount')}{' '}
-                <a href="/sign-up" className="hover:underline text-secondary-foreground font-bold">
+                <Link href="/sign-up" className="hover:underline text-secondary-foreground font-bold">
                     {t('auth.createAccount')}
-                </a>
+                </Link>
             </p>
         </>
     );

@@ -1,7 +1,8 @@
-import MessagesPage from "@/app/page/chat/messages/MessagesPage";
+"use client";
 
-export default function Messages() {
-    return (
-        <MessagesPage />
-    )
+import MessageArea from "@/app/page/chat/messages/chatarea/MessageArea";
+
+export default function MessagesPage() {
+    // Chưa chọn ai → userId = undefined
+    return <MessageArea />;
 }

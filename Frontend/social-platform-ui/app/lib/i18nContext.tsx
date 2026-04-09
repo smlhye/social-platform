@@ -1,7 +1,7 @@
 'use client';
 
-import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
-import { Locale, defaultLocale, getTranslation } from './i18n';
+import { createContext, useContext, useState, ReactNode } from 'react';
+import { Locale, getTranslation } from './i18n';
 
 interface I18nContextType {
     locale: Locale;
@@ -10,27 +10,32 @@ interface I18nContextType {
 }
 
 const I18nContext = createContext<I18nContextType>({
-    locale: defaultLocale,
-    setLocale: () => { },
+    locale: 'vi',
+    setLocale: () => {},
     t: () => ''
 });
 
-export const I18nProvider = ({ children }: { children: ReactNode }) => {
-    const [locale, setLocaleState] = useState<Locale>(defaultLocale);
-    const [messages, setMessages] = useState(getTranslation(defaultLocale));
-
-    useEffect(() => {
-        const saved = localStorage.getItem('locale') as Locale;
-        if (saved) {
-            setLocaleState(saved);
-            setMessages(getTranslation(saved));
-        }
-    }, []);
+export const I18nProvider = ({
+    children,
+    initialLocale,
+    initialMessages
+}: {
+    children: ReactNode;
+    initialLocale: Locale;
+    initialMessages: any;
+}) => {
+    const [locale, setLocaleState] = useState<Locale>(initialLocale);
+    const [messages, setMessages] = useState(initialMessages);
 
     const setLocale = (newLocale: Locale) => {
         setLocaleState(newLocale);
         setMessages(getTranslation(newLocale));
+
+        // lưu localStorage
         localStorage.setItem('locale', newLocale);
+
+        // lưu cookie cho server
+        document.cookie = `locale=${newLocale}; path=/`;
     };
 
     const t = (key: string) => {

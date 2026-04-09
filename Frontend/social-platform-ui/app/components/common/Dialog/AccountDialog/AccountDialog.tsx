@@ -3,13 +3,15 @@
 import { Dialog, DialogContent, Box, Button } from "@mui/material";
 import { useState } from "react";
 import AccountInfo from "./sections/AccountInfo";
+import { FriendResponse } from "@/app/schemas/friend.schema";
 
 interface AccountDialogProps {
     open: boolean;
     onClose: () => void;
+    user: FriendResponse | null
 }
 
-export default function AccountDialog({ open, onClose }: AccountDialogProps) {
+export default function AccountDialog({ open, onClose, user }: AccountDialogProps) {
     const [page, setPage] = useState<"a" | "b">("a");
 
     return (
@@ -41,7 +43,7 @@ export default function AccountDialog({ open, onClose }: AccountDialogProps) {
                                     : "translateX(0%)",
                         }}
                     >
-                        <AccountInfo onClick={() => setPage("b")}/>
+                        <AccountInfo onClick={() => setPage("b")} />
                     </Box>
 
                     {/* PAGE B (mới) */}

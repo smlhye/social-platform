@@ -32,7 +32,7 @@ export default function MessageBubble({
     const MotionBox = motion(Box);
 
     return (
-        <Box className={`flex flex-col`}>
+        <Box className={`flex flex-col w-[100%]`}>
             <Box className={`flex items-end gap-2 ${isMe ? "justify-end" : "justify-start"}`}>
                 {/* Avatar hoặc khoảng trống */}
                 {!isMe ? (

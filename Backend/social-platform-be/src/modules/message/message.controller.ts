@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Req, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, Param, Patch, Post, Query, Req, UseGuards } from "@nestjs/common";
 import { MessageService } from "./message.service";
 import { SendMessageDTO } from "./dto/send_message.dto";
 import { ok } from "src/common/base/response.helper";
@@ -20,12 +20,28 @@ export class MessageController {
         });
     }
 
+    @UseGuards(JwtAuthGuard)
+    @Patch("read/:id")
+    async markedRead(@Req() req: AuthRequest, @Param("id") senderId: string) {
+        const userId = req.user.userId;
+        return ok(this.messageService.markReaded(userId, senderId), "Updated succesfully!");
+    }
+
     @Get(":userA/:userB")
     async getConservation(
         @Param("userA") userA: string,
-        @Param("userB") userB: string
+        @Param("userB") userB: string,
+        @Query("limit") limit: number,
+        @Query("offset") offset: number
     ) {
-        const data = await this.messageService.getConversation(userA, userB);
+        const data = await this.messageService.getConversation(userA, userB, limit, offset);
         return ok(data, "Success");
+    }
+
+    @UseGuards(JwtAuthGuard) // user đã login
+    @Get("recent")
+    async getRecentChats(@Req() req: AuthRequest) {
+        const userId = req.user.userId; // lấy từ JWT payload
+        return ok(await this.messageService.getRecentChats(userId), "Get recent messages successfully!");
     }
 }

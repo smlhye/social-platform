@@ -1,7 +1,13 @@
 import { useI18n } from "@/app/lib/i18nContext";
+import { useEffect, useState } from "react";
 import { FiSearch } from "react-icons/fi";
 
-export default function SearchInput() {
+interface SearchInputProps {
+    value: string,
+    onChange: (v: string) => void
+}
+
+export default function SearchInput({ value, onChange }: SearchInputProps) {
     const { t } = useI18n();
     return (
         <div className="relative w-full max-w-sm">
@@ -14,6 +20,8 @@ export default function SearchInput() {
             {/* Input */}
             <input
                 type="text"
+                value={value}
+                onChange={(e) => onChange(e.target.value)}
                 placeholder={t("chat.search")}
                 className="w-full pl-10 pr-4 py-2 rounded-full bg-background focus:outline-none"
             />
