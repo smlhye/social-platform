@@ -60,7 +60,7 @@ export class MessageService {
         this.realtimeGateway.sendMessagesRead(userId, senderId);
     }
 
-    async getRecentChats(userId: string) {
+    async getRecentChats(userId: string, search?: string) {
 
         // 1. Lấy friendIds
         const friendships = await this.friendRepo.find({
@@ -133,12 +133,67 @@ export class MessageService {
             }
         }
 
+        let result = Array.from(map.values());
+
+        if (search) {
+            const keyword = search.toLowerCase();
+            result = result.filter(u =>
+                u.fullName.toLowerCase().includes(keyword)
+            );
+        }
+
         // 6. Sort
-        return Array.from(map.values()).sort((a, b) => {
+        return result.sort((a, b) => {
             if (!a.lastMessageAt) return 1;
             if (!b.lastMessageAt) return -1;
             return b.lastMessageAt.getTime() - a.lastMessageAt.getTime();
         });
+    }
+
+    async getUnseenChats(userId: string, search?: string) {
+        // 1. Lấy friend có gửi message chưa đọc
+        const raw = await this.repo
+            .createQueryBuilder("m")
+            .where("m.receiverId = :userId", { userId })
+            .andWhere("m.isRead = false")
+            .orderBy("m.createdAt", "DESC")
+            .getMany();
+
+        // 2. Gom theo senderId (mỗi người 1 chat)
+        const map = new Map<string, any>();
+
+        for (const m of raw) {
+            const fid = m.senderId;
+
+            if (map.has(fid)) continue;
+
+            const u = await this.userSerive.findActiveUserById(fid);
+            if (!u) continue;
+
+            map.set(fid, {
+                friendId: fid,
+                fullName: `${u.firstName} ${u.lastName}`,
+                avatar: u.avatarURL,
+
+                lastMessage: m.content,
+                lastMessageAt: m.createdAt,
+
+                unreadCount: 1
+            });
+        }
+
+        let result = Array.from(map.values());
+
+        if (search) {
+            const keyword = search.toLowerCase();
+            result = result.filter(u =>
+                u.fullName.toLowerCase().includes(keyword)
+            );
+        }
+
+        return result.sort(
+            (a, b) => b.lastMessageAt.getTime() - a.lastMessageAt.getTime()
+        );
     }
 
     // async getRecentChats(userId: string) {

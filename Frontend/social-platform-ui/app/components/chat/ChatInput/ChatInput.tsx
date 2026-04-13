@@ -1,5 +1,6 @@
 "use client";
 
+import EmojiPicker, { EmojiClickData } from "emoji-picker-react";
 import { Box, IconButton, InputBase, Tooltip } from "@mui/material";
 import {
     BsEmojiSmile,
@@ -22,7 +23,30 @@ interface ChatInputProps {
 
 export default function ChatInput({ receiverId, onSend }: ChatInputProps) {
     const [value, setValue] = useState("");
+    const [showEmoji, setShowEmoji] = useState(false);
+
     const inputRef = useRef<HTMLTextAreaElement>(null);
+    const pickerRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const handleClickOutside = (e: MouseEvent) => {
+            if (!(e.target instanceof Node)) return;
+
+            if (!pickerRef.current?.contains(e.target)) {
+                setShowEmoji(false);
+            }
+        }
+        document.addEventListener("mousedown", handleClickOutside);
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [])
+
+    const handleEmojiClick = (emojiData: EmojiClickData) => {
+        setValue(prev => prev + emojiData.emoji);
+        inputRef.current?.focus();
+    };
 
     const { t } = useI18n();
 
@@ -52,7 +76,22 @@ export default function ChatInput({ receiverId, onSend }: ChatInputProps) {
         <Box>
             {/* 🔹 TOOLBAR */}
             <Box display="flex" alignItems="center" gap={0.5} mb={0.5}>
-                <ToolbarIcon label="Emoji"><BsEmojiSmile /></ToolbarIcon>
+                <ToolbarIcon onClick={() => setShowEmoji(prev => !prev)} label="Emoji"><BsEmojiSmile /></ToolbarIcon>
+                {showEmoji && (
+                    <div
+                        ref={pickerRef}
+                        className="absolute bottom-14 right-0 z-50 shadow-lg"
+                    >
+                        <EmojiPicker
+                            onEmojiClick={handleEmojiClick}
+                            width={300}
+                            height={400}
+                            searchDisabled={false}
+                            skinTonesDisabled={false}
+                            previewConfig={{ showPreview: false }}
+                        />
+                    </div>
+                )}
                 <ToolbarIcon label="Ảnh"><BsImage /></ToolbarIcon>
                 <ToolbarIcon label="Đính kèm"><BsPaperclip /></ToolbarIcon>
                 <ToolbarIcon label="Mention"><BsPersonPlus /></ToolbarIcon>
@@ -102,6 +141,7 @@ export default function ChatInput({ receiverId, onSend }: ChatInputProps) {
                     )}
                 </Box>
             </Box>
+
         </Box>
     );
 }

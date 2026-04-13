@@ -28,8 +28,7 @@ export const useSuggestionUsersInfinite = (search?: string, limit = 10) => {
 
             return page < totalPages ? page + 1 : undefined;
         },
-        // placeholderData: (prev) => prev
-        enabled: !!search
+        placeholderData: (prev) => prev
     });
 };
 

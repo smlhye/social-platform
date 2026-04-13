@@ -15,6 +15,7 @@ export const END_POINTS = {
         send: "/chat/send",
         conversation: (userA: string, userB: string) => `/chat/${userA}/${userB}`,
         recent: "/chat/recent",
+        unread: "/chat/unread"
     },
     friendship: {
         base: "/friendship",

@@ -35,13 +35,21 @@ export const MessageAPI = {
             }
         ),
 
-    getRecentChats: () =>
+    getRecentChats: (search?: string) =>
         apiGateway<ApiResponse<RecentChatListResponse>>(
-            END_POINTS.chat.recent,
+            `${END_POINTS.chat.recent}${search ? `?search=${encodeURIComponent(search)}` : ""}`,
             {
                 method: "GET"
             }
         ),
+
+    getUnreadChats: (search?: string) =>
+        apiGateway<ApiResponse<RecentChatListResponse>>(
+            `${END_POINTS.chat.unread}${search ? `?search=${encodeURIComponent(search)}` : ""}`,
+            {
+                method: "GET"
+            }
+        )
 
 
 }

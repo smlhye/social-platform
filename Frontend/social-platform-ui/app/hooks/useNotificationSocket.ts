@@ -1,20 +1,15 @@
 import { useEffect, useRef } from "react";
 import { io, Socket } from "socket.io-client";
 import { useToast } from "../components/common/Toast/ToastContext";
+import { useWebSocket } from "../context/websocket.context";
 
 export function useNotificationSocket(userId?: string) {
-    const socketRef = useRef<Socket | null>(null);
     const toast = useToast();
 
+    const { socket } = useWebSocket();
+
     useEffect(() => {
-        if (!userId) return;
-
-        if (!socketRef.current) {
-            socketRef.current = io("http://localhost:5000", { query: { userId } })
-        }
-
-        const socket = socketRef.current;
-        socket.emit("join", `user:${userId}`);
+        if (!socket) return;
 
         const handleNotification = (notification: any) => {
             console.log("OK nha");
@@ -36,5 +31,5 @@ export function useNotificationSocket(userId?: string) {
             socket.off("notification", handleNotification);
         };
 
-    }, [userId])
+    }, [socket, toast])
 }

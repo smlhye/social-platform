@@ -4,6 +4,7 @@ import { AnimatePresence } from "framer-motion"
 import { MessageListResponse, MessageResponse } from "@/app/schemas/message.schema"
 import { useMessagePage } from "@/app/hooks/chat/useMessagePage"
 import { useEffect, useLayoutEffect, useRef } from "react"
+import { FriendItem } from "@/app/types/chat"
 
 export interface Message {
     id: string
@@ -14,6 +15,7 @@ export interface Message {
 
 interface ChatProps {
     currentUserId: string,
+    selectedUser: FriendItem | null,
     lastAddId: string | null
 }
 
@@ -43,7 +45,7 @@ function getPosition(messages: MessageListResponse, index: number): MessagePosit
 }
 
 
-export default function Chat({ currentUserId, lastAddId }: ChatProps) {
+export default function Chat({ currentUserId, selectedUser, lastAddId }: ChatProps) {
     const { messagesLazy, loadMore, loadingMore, hasMore } = useMessagePage();
     const containerRef = useRef<HTMLDivElement>(null);
     const loadMoreRef = useRef<HTMLDivElement>(null);
@@ -82,9 +84,9 @@ export default function Chat({ currentUserId, lastAddId }: ChatProps) {
     };
 
     return (
-        <div className="flex flex-col h-[500px]">
+        <div className="flex flex-col h-full">
             <div ref={containerRef}
-                className="flex-1 overflow-y-auto py-3 flex flex-col-reverse gap-1 scrollbar-thin scrollbar-thumb-rounded scrollbar-thumb-gray-300"
+                className="flex-1 overflow-y-auto py-3 px-3 flex flex-col-reverse gap-1 scrollbar-thin scrollbar-thumb-rounded scrollbar-thumb-gray-300"
             >
                 {/* <AnimatePresence initial={false}> */}
                 {messagesLazy.map((msg, i) => {
@@ -115,7 +117,7 @@ export default function Chat({ currentUserId, lastAddId }: ChatProps) {
                                     hour: "2-digit",
                                     minute: "2-digit",
                                 })}
-                                user=""
+                                user={selectedUser}
                                 isNew={msg.id === lastAddId}
                             />
                         </Box>

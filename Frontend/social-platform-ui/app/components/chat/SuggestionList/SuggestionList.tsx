@@ -38,7 +38,10 @@ export default function SuggestionList({
     const { mutate: send, isPending: sending } = useSendRequest();
 
     const { mutate: cancel, isPending: cancelling } = useCancelRequest();
-    const handleSelect = useCallback((user: any) => onSelect?.(user), [onSelect]);
+    const handleSelect = useCallback((user: any) => {
+        console.log("HI DAY LA USECALLBACK")
+        onSelect?.(user)
+    }, [onSelect]);
     const handleSend = useCallback((userId: string) => send({ addresseeId: userId }), [send]);
     const handleCancel = useCallback((userId: string) => cancel(userId), [cancel]);
 
@@ -84,15 +87,15 @@ export default function SuggestionList({
         return () => observer.current?.disconnect();
     }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
-    if (showSkeleton) {
-        return (
-            <div className="space-y-2">
-                {Array.from({ length: 5 }).map((_, i) => (
-                    <UserItemSkeleton key={i} />
-                ))}
-            </div>
-        );
-    }
+    // if (showSkeleton) {
+    //     return (
+    //         <div className="space-y-2">
+    //             {Array.from({ length: 5 }).map((_, i) => (
+    //                 <UserItemSkeleton key={i} />
+    //             ))}
+    //         </div>
+    //     );
+    // }
 
     return (
         <div>

@@ -49,4 +49,7 @@ export class User {
 
     @DeleteDateColumn({ name: 'deleted_at' })
     deletedAt: Date;
+
+    @Column({ type: "timestamp", nullable: true })
+    lastSeen?: Date;
 }

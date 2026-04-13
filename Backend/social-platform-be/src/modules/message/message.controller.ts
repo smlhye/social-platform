@@ -40,8 +40,21 @@ export class MessageController {
 
     @UseGuards(JwtAuthGuard) // user đã login
     @Get("recent")
-    async getRecentChats(@Req() req: AuthRequest) {
+    async getRecentChats(@Req() req: AuthRequest, @Query("search") search?: string) {
         const userId = req.user.userId; // lấy từ JWT payload
-        return ok(await this.messageService.getRecentChats(userId), "Get recent messages successfully!");
+        return ok(
+            await this.messageService.getRecentChats(userId, search),
+            "Get recent messages successfully!"
+        );
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Get("unread")
+    async getUnreadChats(@Req() req: AuthRequest, @Query("search") search?: string) {
+        const userId = req.user.userId;
+        return ok(
+            await this.messageService.getUnseenChats(userId, search),
+            "Get unread chats successfully!"
+        );
     }
 }

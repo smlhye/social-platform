@@ -55,6 +55,7 @@ export const GetUserByIdSchema = z.object({
     gender: z.string(),
     email: z.string(),
     phoneNumber: z.string(),
+    lastSeen: z.string().optional(),
     isFriend: z.boolean(),
     isRequest: z.boolean(),
     isAddress: z.boolean()

@@ -3,6 +3,7 @@
 import FriendSection from "@/app/components/chat/layout/Profile/ProfileFriend";
 import ProfileView from "@/app/components/chat/layout/Profile/ProfileView";
 import { FullScreenLoading } from "@/app/components/common/Loading";
+import { useWebSocket } from "@/app/context/websocket.context";
 import { useProfile } from "@/app/hooks/chat/useProfilePage";
 import { FriendListResponse, FriendResponse } from "@/app/schemas/friend.schema";
 import { useEffect, useRef, useState } from "react";
@@ -26,13 +27,9 @@ export default function ProfilePage() {
     }, [friendList]);
 
     // ---------- connect socket ----------
+    const { socket } = useWebSocket();
     useEffect(() => {
-        if (!currentUserId) return; // đợi có userId
-
-        const socket = io("http://localhost:5000", {
-            query: { userId: currentUserId }
-        });
-        socketRef.current = socket;
+        if (!socket) return;
 
         const handleOnline = ({ userId }: { userId: string }) => {
             setFriends(prev =>
@@ -46,15 +43,17 @@ export default function ProfilePage() {
             );
         };
 
+        socket.off("userOnline", handleOnline);
+        socket.off("userOffline", handleOffline);
+
         socket.on("userOnline", handleOnline);
         socket.on("userOffline", handleOffline);
 
         return () => {
             socket.off("userOnline", handleOnline);
             socket.off("userOffline", handleOffline);
-            socket.disconnect();
         };
-    }, [currentUserId]);
+    }, [socket])
 
     if (isLoading || !me) return <FullScreenLoading />;
 

@@ -63,9 +63,10 @@ export class UserService {
             gender: user.gender,
             email: user.email,
             phoneNumber: user.phoneNumber,
+            lastSeen: isFriend ? user.lastSeen : null,
             isFriend: !!isFriend,
             isRequest: !!isRequest,
-            isAddress: !!isAddress
+            isAddress: !!isAddress,
         };
     }
 

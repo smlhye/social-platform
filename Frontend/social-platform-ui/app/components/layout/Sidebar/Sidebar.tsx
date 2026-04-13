@@ -131,11 +131,11 @@ export default function Sidebar() {
                 <AvatarUI name="Hồ Đông Huy" />
 
                 {/* Notification icon với badge */}
-                <Box className="relative cursor-pointer mt-2">
+                {/* <Box className="relative cursor-pointer mt-2">
                     <Badge badgeContent={notificationCount} color="error">
                         <img src="/icons/bell.svg" alt="notification" width={24} height={24} />
                     </Badge>
-                </Box>
+                </Box> */}
 
                 <Box className="mt-2 flex flex-col">
                     {sidebarItems.map((item) => (

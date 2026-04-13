@@ -7,14 +7,30 @@ import { BsLayoutSidebarReverse } from "react-icons/bs";
 import { useI18n } from "@/app/lib/i18nContext";
 
 interface ChatHeaderProps {
-    id: string,
-    name: string,
-    avatar?: string,
-    active: boolean,
-    onToggle: () => void
+    id: string;
+    name: string;
+    avatar?: string;
+    active: boolean;
+    lastSeen?: string | null; // 🔥 thêm
+    onToggle: () => void;
 }
 
-export default function ChatHeader({ id, name, avatar, active, onToggle }: ChatHeaderProps) {
+function formatLastSeen(lastSeen?: string | null) {
+    if (!lastSeen) return "";
+
+    const diff = Date.now() - new Date(lastSeen).getTime();
+
+    const minutes = Math.floor(diff / 60000);
+    const hours = Math.floor(diff / 3600000);
+    const days = Math.floor(diff / 86400000);
+
+    if (minutes < 1) return "Vừa xong";
+    if (minutes < 60) return `${minutes} phút trước`;
+    if (hours < 24) return `${hours} giờ trước`;
+    return `${days} ngày trước`;
+}
+
+export default function ChatHeader({ id, name, avatar, active, lastSeen, onToggle }: ChatHeaderProps) {
 
     const { t } = useI18n();
 
@@ -26,8 +42,20 @@ export default function ChatHeader({ id, name, avatar, active, onToggle }: ChatH
                     <p className={`flex-1 min-w-0 truncate text-base font-semibold`}>
                         {name}
                     </p>
-                    <p className={`flex-1 min-w-0 truncate text-xs`}>
-                        {t("chat.online")}
+                    <p className="text-xs flex items-center gap-1">
+                        {active ? (
+                            <>
+                                <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+                                {t("chat.online")}
+                            </>
+                        ) : (
+                            lastSeen && (
+                                <>
+                                    <span className="w-2 h-2 bg-gray-400 rounded-full"></span>
+                                    Offline • {formatLastSeen(lastSeen)}
+                                </>
+                            )
+                        )}
                     </p>
                 </Stack>
             </Stack>

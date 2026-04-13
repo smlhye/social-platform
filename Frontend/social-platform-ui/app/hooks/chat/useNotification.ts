@@ -1,4 +1,5 @@
 "use client";
+import { useWebSocket } from "@/app/context/websocket.context";
 import { useEffect, useState, useRef } from "react";
 import { io, Socket } from "socket.io-client";
 
@@ -14,28 +15,22 @@ export interface Notification {
 
 export function useNotifications(currentUserId: string | undefined) {
     const [notifications, setNotifications] = useState<Notification[]>([]);
-    const socketRef = useRef<Socket | null>(null);
+    const { socket } = useWebSocket();
 
     useEffect(() => {
-        if (!currentUserId) return;
-
-        const socket = io("http://localhost:5000", {
-            query: { userId: currentUserId }
-        });
-
-        socketRef.current = socket;
+        if (!socket) return;
 
         const handleNotification = (notification: Notification) => {
             setNotifications(prev => [notification, ...prev]);
         };
 
+        socket.off("notification", handleNotification);
         socket.on("notification", handleNotification);
 
         return () => {
             socket.off("notification", handleNotification);
-            socket.disconnect();
         };
-    }, [currentUserId]);
+    }, [socket, currentUserId]);
 
     return { notifications };
 }

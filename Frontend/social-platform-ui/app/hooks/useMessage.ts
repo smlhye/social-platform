@@ -38,9 +38,13 @@ export const useSendMessage = () => {
     });
 };
 
-export const useRecentMesList = () => {
+export const useChatList = (tab: number, search?: string) => {
     return useQuery<ApiResponse<RecentChatListResponse>>({
-        queryKey: ["recentChat"],
-        queryFn: MessageAPI.getRecentChats
-    })
-}
+        queryKey: ["chats", tab, search],
+        queryFn: () =>
+            tab === 0
+                ? MessageAPI.getRecentChats(search)
+                : MessageAPI.getUnreadChats(search),
+        placeholderData: (prev) => prev
+    });
+};

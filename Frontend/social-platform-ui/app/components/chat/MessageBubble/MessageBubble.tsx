@@ -1,6 +1,7 @@
 import { Box } from "@mui/material"
 import { AvatarUI } from "../../common/Avatar"
 import { motion } from "framer-motion"
+import { FriendItem } from "@/app/types/chat"
 
 export type MessagePosition = "single" | "first" | "middle" | "last"
 
@@ -9,7 +10,7 @@ interface MessageBubbleProps {
     isMe: boolean,
     position?: MessagePosition,
     time: string,
-    user: string,
+    user: FriendItem | null,
     isNew?: boolean
 }
 
@@ -31,13 +32,15 @@ export default function MessageBubble({
 
     const MotionBox = motion(Box);
 
+    console.log("User From MessageBubble", user);
+
     return (
         <Box className={`flex flex-col w-[100%]`}>
             <Box className={`flex items-end gap-2 ${isMe ? "justify-end" : "justify-start"}`}>
                 {/* Avatar hoặc khoảng trống */}
                 {!isMe ? (
                     (position === "single" || position === "first") ? (
-                        <AvatarUI name="Hồ Đông Huy" size={40} />
+                        <AvatarUI avatar={user?.avatar} name={user?.fullName ?? ""} size={40} />
                     ) : (
                         <Box style={{ width: 40 }} />
                     )

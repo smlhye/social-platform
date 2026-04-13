@@ -203,8 +203,10 @@ body {
 
 .chat-scroll {
   overflow-y: auto;
-  padding-right: 12px;          /* bù scrollbar */
-  margin-right: -12px;          /* kéo lại layout */
+  padding-right: 12px;
+  /* bù scrollbar */
+  margin-right: -12px;
+  /* kéo lại layout */
 }
 
 
@@ -257,4 +259,17 @@ body {
 
 .scroll-overlay:hover::-webkit-scrollbar-thumb {
   background-color: rgba(0, 0, 0, 0.4);
+}
+
+.hide-scroll {
+  overflow: auto;
+  scrollbar-width: none;
+  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE/Edge cũ */
+}
+
+.hide-scroll::-webkit-scrollbar {
+  display: none;
+  /* Chrome/Safari */
 }

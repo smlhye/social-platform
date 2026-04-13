@@ -1,8 +1,9 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { InfiniteData, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ApiResponse } from "../schemas/common.schema";
 import { FriendListResponse, InboxRequestList, SendRequestPayload } from "../schemas/friend.schema";
 import { FriendAPI } from "../api/friendship.api";
 import { END_POINTS } from "../api/config";
+import { SuggestionUserResponse } from "../schemas/user.schema";
 
 export const useFriends = () => {
     return useQuery<ApiResponse<FriendListResponse>>({
@@ -16,15 +17,28 @@ export const useSendRequest = () => {
     return useMutation<ApiResponse<null>, Error, SendRequestPayload>({
         mutationFn: FriendAPI.sendFriendshipRequest,
         onSuccess: (_, variables) => {
-            // 🔥 refetch user detail
             queryClient.invalidateQueries({
                 queryKey: ["get-user", variables.addresseeId],
             });
-
-            // 🔥 (optional) update suggestion list
-            queryClient.invalidateQueries({
-                queryKey: ["suggestion-users"],
-            });
+            queryClient.setQueriesData<InfiniteData<ApiResponse<SuggestionUserResponse>>>(
+                {
+                    queryKey: ["suggestion-users"],
+                    exact: false,
+                },
+                (old) => {
+                    if (!old) return old;
+                    return {
+                        ...old,
+                        pages: old.pages.map((page) => ({
+                            ...page,
+                            resData: {
+                                ...page.resData,
+                                data: page.resData.data.map((user) => user.id === variables.addresseeId ? { ...user, isRequest: true } : user)
+                            }
+                        }))
+                    };
+                }
+            )
         },
     })
 }
@@ -35,15 +49,30 @@ export const useCancelRequest = () => {
         mutationFn: (id) => FriendAPI.cancelFriendshipRequest(id),
 
         onSuccess: (_, targetId) => {
-            // 🔥 refetch suggestion list
-            queryClient.invalidateQueries({
-                queryKey: ["suggestion-users"],
-            });
-
-            // 🔥 refetch user detail (nếu đang mở)
             queryClient.invalidateQueries({
                 queryKey: ["get-user", targetId],
             });
+
+            queryClient.setQueriesData<InfiniteData<ApiResponse<SuggestionUserResponse>>>(
+                {
+                    queryKey: ["suggestion-users"],
+                    exact: false,
+                },
+                (old) => {
+                    if (!old) return old;
+
+                    return {
+                        ...old,
+                        pages: old.pages.map((page) => ({
+                            ...page,
+                            resData: {
+                                ...page.resData,
+                                data: page.resData.data.map((user) => user.id === targetId ? { ...user, isRequest: false } : user)
+                            }
+                        }))
+                    };
+                }
+            );
         },
     })
 }

@@ -4,9 +4,10 @@ import { io, Socket } from "socket.io-client";
 import { useParams } from "next/navigation";
 import { MessageListResponse, MessageResponse, RecentChatListResponse, RecentChatResponse } from "@/app/schemas/message.schema";
 import { useCurrentUser } from "../useAuth";
-import { useConversationInfinite, useMarkAsRead, useRecentMesList, useSendMessage } from "../useMessage";
+import { useChatList, useConversationInfinite, useMarkAsRead, useSendMessage } from "../useMessage";
 import { InfiniteData, useQueryClient } from "@tanstack/react-query";
 import { ApiResponse } from "@/app/schemas/common.schema";
+import { useWebSocket } from "@/app/context/websocket.context";
 
 export function useMessagePage() {
     const params = useParams();
@@ -15,7 +16,21 @@ export function useMessagePage() {
     const currentUserId = me?.resData.id;
 
     // Sidebar
-    const { data: recentChats, isLoading: isRecentLoading } = useRecentMesList();
+
+
+    const [query, setQuery] = useState("");
+    const [debouncedQuery, setDebouncedQuery] = useState(query);
+    const [tab, setTab] = useState(0);
+    const [infoBar, setInfoBar] = useState(false);
+
+    // debounce trực tiếp trong component
+    useEffect(() => {
+        const handler = setTimeout(() => setDebouncedQuery(query), 300);
+        return () => clearTimeout(handler);
+    }, [query]);
+
+    const { data: recentChats, isLoading: isRecentLoading } = useChatList(tab, debouncedQuery);
+
     const [recentList, setRecentList] = useState<RecentChatListResponse>([]);
 
     useEffect(() => {
@@ -33,11 +48,7 @@ export function useMessagePage() {
 
     // Messages
     const [lastAddedId, setLastAddedId] = useState<string | null>(null);
-    const messageCache = useRef<Record<string, MessageListResponse>>({});
     const scrollRef = useRef<HTMLDivElement>(null);
-    const prevScrollHeight = useRef(0);
-    const isAtBottomRef = useRef(true);
-    const isFirstLoadRef = useRef(true);
 
     const {
         data: messagesData,
@@ -48,21 +59,16 @@ export function useMessagePage() {
     } = useConversationInfinite(currentUserId, receiverId);
 
     const messagesLazy = messagesData?.pages.flatMap(page => page.resData ?? []) ?? [];
-    
 
-    // Socket
-    const socketRef = useRef<Socket | null>(null);
+    const { socket } = useWebSocket();
+
     const markAsReadMutation = useMarkAsRead();
     const sendMessageMutation = useSendMessage();
 
     const queryClient = useQueryClient();
 
     useEffect(() => {
-        if (!currentUserId) return;
-        if (!socketRef.current) {
-            socketRef.current = io("http://localhost:5000", { query: { userId: currentUserId } });
-        }
-        const socket = socketRef.current;
+        if (!socket) return;
 
         const handleReceiveMessage = (msg: MessageResponse) => {
             const fid = msg.senderId === currentUserId ? msg.receiverId : msg.senderId;
@@ -120,23 +126,24 @@ export function useMessagePage() {
                     }
                 );
 
-                markAsReadMutation.mutate(receiverId, {
-                    onSuccess: () => {
-                        setRecentList(prev => prev.map(item => item.friendId === receiverId ? { ...item, unreadCount: 0 } : item));
-                    }
-                });
+                if (msg.senderId !== currentUserId) {
+                    markAsReadMutation.mutate(receiverId, {
+                        onSuccess: () => {
+                            setRecentList(prev => prev.map(item => item.friendId === receiverId ? { ...item, unreadCount: 0 } : item));
+                        }
+                    });
+                }
             } else {
                 console.log("[FE] Message for another user, not updating chat area");
             }
         };
 
-        socket.off("receiveMessage");
         socket.on("receiveMessage", handleReceiveMessage);
 
         return () => {
             socket.off("receiveMessage", handleReceiveMessage);
         };
-    }, [currentUserId, receiverId]);
+    }, [socket, currentUserId, receiverId]);
 
     useEffect(() => {
         if (!receiverId) return;
@@ -175,8 +182,7 @@ export function useMessagePage() {
     };
 
     // InfoBar + Tab
-    const [tab, setTab] = useState(0);
-    const [infoBar, setInfoBar] = useState(false);
+
 
     return {
         hasMore: hasNextPage,
@@ -193,6 +199,8 @@ export function useMessagePage() {
         handleSendMessage,
         isLoading,
         isRecentLoading,
-        lastAddedId
+        lastAddedId,
+        query,
+        setQuery
     };
 }

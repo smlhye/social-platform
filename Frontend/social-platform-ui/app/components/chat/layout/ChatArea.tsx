@@ -5,6 +5,7 @@ import { CircularProgress } from "@mui/material";
 import Chat from "../Chat/Chat";
 import { IllustrationMes } from "../../common/Illustration";
 import { ChatInput } from "../ChatInput";
+import { useGetUserById } from "@/app/hooks/useUser";
 
 interface ChatAreaProps {
     selectedUser: FriendItem | null,
@@ -23,46 +24,44 @@ export default function ChatArea({
     setInfoBar,
     isLoading
 }: ChatAreaProps) {
+
+    const userDetail = useGetUserById(selectedUser?.friendId ?? "");
+
+    const apiUser = userDetail.data?.resData;
+
     return (
-        <div className="flex-1 flex flex-col min-w-0">
+        <div className="flex flex-col min-w-0 h-full min-h-0">
 
             {/* Header */}
             {selectedUser && (
                 <div className="shrink-0 dark:bg-sub-background dark:border-l-2 dark:border-background shadow-bottom">
                     <ChatHeader
-                        id={selectedUser?.friendId ?? ""}
-                        name={selectedUser?.fullName ?? ""}
-                        avatar={selectedUser?.avatar ?? ""}
-                        active={false}
+                        id={apiUser?.id ?? ""}
+                        name={apiUser?.fullName ?? ""}
+                        avatar={apiUser?.avatarURL ?? ""}
+                        active={false}   // 🔥
+                        lastSeen={apiUser?.lastSeen ?? null}  // 🔥
                         onToggle={() => setInfoBar(!infoBar)}
                     />
                 </div>
             )}
-        
 
-            {/* Messages */}
-            <div
-                className="flex-1 p-6 h-full flex flex-col scroll-overlay min-w-0"
-            >
+            {/* CHAT */}
+            <div className="flex-1 flex flex-col min-h-0">
                 {isLoading ? (
                     <div className="h-full flex items-center justify-center">
                         <CircularProgress />
                     </div>
-                ) :  (
+                ) : (
                     <Chat
                         currentUserId={currentUserId}
-                        lastAddId={null} // giữ nguyên nếu không highlight, hoặc truyền lastAddedId nếu muốn
+                        selectedUser={selectedUser}
+                        lastAddId={null}
                     />
                 )}
-                
-                
-                {/* <IllustrationMes
-                          svg={<img src="/illustrations/undraw_chatting_5u5z.svg" />}
-                          title="Hãy cùng trò chuyện với nhau"
-                > */}
             </div>
 
-            {/* Input */}
+            {/* INPUT */}
             {selectedUser?.friendId && (
                 <div className="shrink-0 shadow-top p-2 bg-background dark:bg-sub-background dark:border-l-2 dark:border-background">
                     <ChatInput receiverId={selectedUser.friendId} onSend={handleSendMessage} />

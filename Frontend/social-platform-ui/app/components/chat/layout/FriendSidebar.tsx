@@ -1,17 +1,20 @@
 import { FriendItem } from "@/app/types/chat";
-import { SearchInput } from "../../common/Input";
 import { CustomTab, CustomTabs } from "../../common/Tab";
 import { FriendLabel, FriendLabelLoading } from "../FriendLabel";
 import { RecentChatListResponse } from "@/app/schemas/message.schema";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import { SearchInput } from "../../common/Input";
+import { useEffect, useState } from "react";
 
 interface FriendSidebarProps {
     users: RecentChatListResponse,
     loading: boolean,
     tab: number,
     setTab: (tab: number) => void,
-    t: (key: string) => string
+    t: (key: string) => string,
+    search: string,
+    onSearch: (value: string) => void
 }
 
 export default function FriendSidebar({
@@ -19,7 +22,9 @@ export default function FriendSidebar({
     loading,
     tab,
     setTab,
-    t
+    t,
+    search,
+    onSearch
 }: FriendSidebarProps) {
 
     const param = useParams();
@@ -31,15 +36,14 @@ export default function FriendSidebar({
                 {t("chat.chat")}
             </h2>
 
-            <ul className="flex-1 flex flex-col gap-3 mt-2 overflow-y-auto">
+            <SearchInput value={search} onChange={onSearch} />
 
-                <SearchInput />
+            <CustomTabs className="mt-2" value={tab} onChange={(_, v) => setTab(v)}>
+                <CustomTab label={t("chat.all")} />
+                <CustomTab label={t("chat.notSeen")} />
+            </CustomTabs>
 
-                <CustomTabs value={tab} onChange={(_, v) => setTab(v)}>
-                    <CustomTab label={t("chat.all")} />
-                    <CustomTab label={t("chat.notSeen")} />
-                </CustomTabs>
-
+            <ul className="flex-1 flex flex-col gap-3 mt-2 overflow-y-auto hide-scroll">
                 {loading
                     ? Array.from({ length: 4 }).map((_, i) => (<FriendLabelLoading key={i} />)) :
                     users.map((item) => {
